@@ -1,1 +1,2 @@
-# simply-mario
+# SimplyMario
+A game by CyberCoders.
