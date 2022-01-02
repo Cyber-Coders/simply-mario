@@ -10,7 +10,7 @@ class Game:
         self.screen = pygame.display.set_mode(self.size)
 
     def update(self):
-        pass
+        self.screen.fill((0, 255, 0))
 
 
 if __name__ == "__main__":
