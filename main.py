@@ -13,6 +13,7 @@ class Game:
         self.screen = pygame.display.set_mode(self.size)
 
     def start_game(self):
+        pygame.mixer.music.stop()
         clock = pygame.time.Clock()
 
         while True:
