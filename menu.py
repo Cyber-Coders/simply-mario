@@ -12,14 +12,16 @@ class Menu(Game):
         pygame.mixer.music.play()
         self.screen = pygame.display.set_mode((1280, 720))
         self.background = pygame.Surface((1290, 720))
-        self.manager = pygame_gui.UIManager((1280, 720))
+        self.manager = pygame_gui.UIManager((1280, 720), 'theme.json')
         self.button_start = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((800, 200), (150, 60)), text='Start',
                                                          manager=self.manager)
-        self.button_settings = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((800, 270), (150, 60)),
+        self.button_settings = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((800, 340), (150, 60)),
                                                             text='Settings', manager=self.manager)
-        self.button_help = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((800, 340), (150, 60)), text='Help',
+        self.button_help = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((800, 410), (150, 60)), text='Help',
                                                         manager=self.manager)
-        self.button_quit = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((800, 410), (150, 60)), text='Quit',
+        self.button_quit = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((800, 480), (150, 60)), text='Quit',
+                                                        manager=self.manager)
+        self.button_records = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((800, 270), (150, 60)), text='Records',
                                                         manager=self.manager)
 
     def start_menu(self):
