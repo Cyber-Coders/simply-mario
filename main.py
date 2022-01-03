@@ -7,7 +7,7 @@ import pygame
 import pygame_gui
 
 
-class Game():
+class Game:
     def __init__(self):
         self.size = self.width, self.height = config.SIZE
         self.screen = pygame.display.set_mode(self.size)
