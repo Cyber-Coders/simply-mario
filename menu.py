@@ -1,5 +1,6 @@
 import pygame
 import pygame_gui
+import time
 
 from main import Game
 
@@ -26,12 +27,18 @@ class Menu(Game):
 
     def start_menu(self):
         clock = pygame.time.Clock()
+        start_time = time.time()
+        end_time = 64
         image = pygame.image.load('data/sprites/background.png')
 
         running = True
 
         while running:
+            current_time = int(time.time() - start_time)
             time_delta = clock.tick(60) / 1000.0
+
+            if current_time is end_time:
+                pygame.mixer.music.play()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
