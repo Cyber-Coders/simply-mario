@@ -7,7 +7,12 @@ import pygame
 import pygame_gui
 
 
-class Game():
+def start_menu():
+    menu = Menu()
+    menu.menu()
+
+
+class Game:
     def __init__(self):
         self.size = self.width, self.height = config.SIZE
         self.screen = pygame.display.set_mode(self.size)
@@ -16,6 +21,8 @@ class Game():
         clock = pygame.time.Clock()
 
         while True:
+            pygame.mixer.music.stop()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit(0)
@@ -25,10 +32,6 @@ class Game():
 
             pygame.display.flip()
 
-    def start_menu(self):
-        menu = Menu()
-        menu.menu()
-
     def update(self):
         self.screen.fill((0, 255, 0))
 
@@ -36,4 +39,4 @@ class Game():
 if __name__ == "__main__":
     pygame.init()
     game = Game()
-    game.start_menu()
+    start_menu()
