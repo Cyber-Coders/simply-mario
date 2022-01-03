@@ -7,6 +7,9 @@ from main import Game
 class Menu(Game):
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
+        pygame.mixer.music.load('data/sounds/super-mario-saundtrek.mp3')
+        pygame.mixer.music.play()
         self.screen = pygame.display.set_mode((1280, 720))
         self.background = pygame.Surface((1290, 720))
         self.manager = pygame_gui.UIManager((1280, 720))
@@ -46,3 +49,7 @@ class Menu(Game):
             self.screen.blit(image, (0, 0))
             self.manager.draw_ui(self.screen)
             pygame.display.flip()
+
+
+menu = Menu()
+menu.start_menu()
