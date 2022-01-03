@@ -11,7 +11,7 @@ class Menu(Game):
         pygame.font.init()
         pygame.mixer.init()
         pygame.mixer.music.load('data/sounds/super-mario-saundtrek.mp3')
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(-1)
         self.screen = pygame.display.set_mode((1280, 720))
         self.background = pygame.Surface((1290, 720))
         self.manager = pygame_gui.UIManager((1280, 720), 'theme.json')
@@ -27,18 +27,12 @@ class Menu(Game):
 
     def start_menu(self):
         clock = pygame.time.Clock()
-        start_time = time.time()
-        end_time = 64
         image = pygame.image.load('data/sprites/background.png')
 
         running = True
 
         while running:
-            current_time = int(time.time() - start_time)
             time_delta = clock.tick(60) / 1000.0
-
-            if current_time is end_time:
-                pygame.mixer.music.play()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
