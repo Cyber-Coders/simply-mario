@@ -43,9 +43,17 @@ class Menu(Game):
                     if event.ui_element == self.button_start:
                         self.start_game()
 
-                if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == self.button_settings:
+                        self.window_options()
+
                     if event.ui_element == self.button_quit:
                         running = False
+
+                    if event.ui_element == self.button_records:
+                        self.window_records()
+
+                    if event.ui_element == self.button_records:
+                        self.window_help()
 
                 self.manager.process_events(event)
             self.manager.update(time_delta)
