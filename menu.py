@@ -1,11 +1,68 @@
 import pygame
 import pygame_gui
-import time
+
 
 from main import Game
 
 
-class Menu(Game):
+def window_settings():  # Раздел настроек
+    screen = pygame.display.set_mode((1280, 720))
+    manager = pygame_gui.UIManager((1280, 720))
+    clock = pygame.time.Clock()
+    running = True
+
+    while running:
+        time_delta = clock.tick(60) / 1000.0
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            manager.process_events(event)
+        manager.update(time_delta)
+        manager.draw_ui(screen)
+        pygame.display.flip()
+
+
+def window_help():  # Раздел помощи
+    screen = pygame.display.set_mode((1280, 720))
+    manager = pygame_gui.UIManager((1280, 720))
+    clock = pygame.time.Clock()
+    running = True
+
+    while running:
+        time_delta = clock.tick(60) / 1000.0
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            manager.process_events(event)
+        manager.update(time_delta)
+        manager.draw_ui(screen)
+        pygame.display.flip()
+
+
+def window_records():  # Раздел рекордов
+    screen = pygame.display.set_mode((1280, 720))
+    manager = pygame_gui.UIManager((1280, 720))
+    clock = pygame.time.Clock()
+    running = True
+
+    while running:
+        time_delta = clock.tick(60) / 1000.0
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            manager.process_events(event)
+        manager.update(time_delta)
+        manager.draw_ui(screen)
+        pygame.display.flip()
+
+
+class Menu(Game):  # Главное меню
     def __init__(self):
         pygame.init()
         pygame.font.init()
@@ -26,7 +83,7 @@ class Menu(Game):
         self.button_settings = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((770, 340), (230, 60)),
                                                            text='settings', manager=self.manager)
 
-    def menu(self):
+    def menu(self):  # Метод отображения главного меню
         clock = pygame.time.Clock()
         image = pygame.image.load('data/sprites/background.png')
 
@@ -44,16 +101,16 @@ class Menu(Game):
                         self.start_game()
 
                     if event.ui_element == self.button_settings:
-                        self.window_settings()
+                        window_settings()
 
                     if event.ui_element == self.button_quit:
                         running = False
 
                     if event.ui_element == self.button_records:
-                        self.window_records()
+                        window_records()
 
                     if event.ui_element == self.button_help:
-                        self.window_help()
+                        window_help()
 
                 self.manager.process_events(event)
             self.manager.update(time_delta)
