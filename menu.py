@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 import pygame_gui
 
@@ -11,7 +13,7 @@ def window_records():  # Раздел рекордов
     running = True
     image = pygame.image.load('data/sprites/records.png')
     screen.blit(image, (0, 0))
-    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1000, 600), (190, 50)), text='Cancel',
+    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1000, 600), (190, 50)), text='Back',
                                                  manager=manager)
 
     while running:
@@ -19,10 +21,14 @@ def window_records():  # Раздел рекордов
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                sys.exit(0)
 
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == button_cancel:
+                    running = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
                     running = False
 
             manager.process_events(event)
@@ -36,7 +42,7 @@ def window_help():  # Раздел помощи
     clock = pygame.time.Clock()
     manager = pygame_gui.UIManager((1280, 720), 'theme.json')
     running = True
-    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1000, 600), (190, 50)), text='Cancel',
+    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1000, 600), (190, 50)), text='Back',
                                                  manager=manager)
     image = pygame.image.load('data/sprites/help.png')
     screen.blit(image, (0, 0))
@@ -46,10 +52,14 @@ def window_help():  # Раздел помощи
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                sys.exit(0)
 
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == button_cancel:
+                    running = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
                     running = False
 
             manager.process_events(event)
