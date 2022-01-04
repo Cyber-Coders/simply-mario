@@ -1,0 +1,64 @@
+ {
+     "defaults":
+     {
+         "colours":
+         {
+             "normal_bg":"#FFFFFF00",
+             "hovered_bg":"#FFFFFF00",
+             "disabled_bg":"#FFFFFF00",
+             "selected_bg":"#FFFFFF00",
+             "dark_bg":"#FFFFFF00",
+             "normal_text":"#d6d6d6",
+             "hovered_text":"#FFFFFF",
+             "selected_text":"#FFFFFF",
+             "disabled_text":"#FFFFFF",
+             "link_text": "#FFFFFF",
+             "link_hover": "#FFFFFF",
+             "link_selected": "#FFFFFF",
+             "text_shadow": "#777777",
+             "active_border": "#FFFFFF00",
+             "filled_bar":"#FFFFFF",
+             "unfilled_bar":"#FFFFFF"
+         }
+     },
+
+     "button":
+     {
+         "colours":
+         {
+             "normal_bg":"#FFFFFF00",
+             "hovered_bg":"#FFFFFF00",
+             "disabled_bg":"#FFFFFF00",
+             "selected_bg":"#FFFFFF00",
+             "active_bg":"#FFFFFF00",
+             "dark_bg":"#FFFFFF00",
+             "normal_text":"#d6d6d6",
+             "hovered_text":"#FFFFFF",
+             "selected_text":"#FFFFFF",
+             "disabled_text":"#d1d1d1",
+             "active_text":"#FFFFFF",
+             "normal_border": "#FFFFFF00",
+             "hovered_border": "#FFFFFF00",
+             "disabled_border": "#FFFFFF00",
+             "selected_border": "#FFFFFF00",
+             "active_border": "#FFFFFF00"
+         },
+
+         "misc":
+         {
+             "tool_tip_delay": "1.5"
+         },
+         "font":
+         {
+             "name": "minica",
+             "size": "42",
+             "bold": "3",
+             "italic": "0",
+             "regular_resource": {
+                 "package": "minica",
+                 "resource": "minica-1102-1.ttf"
+             },
+             "regular_path": "data/font/minica-1102-1.ttf"
+         }
+     }
+ }
