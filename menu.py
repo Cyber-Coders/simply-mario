@@ -29,8 +29,6 @@ class Menu(Game):
     def menu(self):
         clock = pygame.time.Clock()
         image = pygame.image.load('data/sprites/background.png')
-        pygame.mouse.set_visible(False)
-        cursor_image = pygame.image.load('data/sprites/')
 
         running = True
 
@@ -60,6 +58,5 @@ class Menu(Game):
                 self.manager.process_events(event)
             self.manager.update(time_delta)
             self.screen.blit(image, (0, 0))
-            self.screen.blit(cursor_image, (pygame.mouse.get_pos()))
             self.manager.draw_ui(self.screen)
             pygame.display.flip()
