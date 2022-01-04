@@ -25,6 +25,10 @@ def window_records():  # Раздел рекордов
                 if event.ui_element == button_cancel:
                     running = False
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+
             manager.process_events(event)
         manager.update(time_delta)
         manager.draw_ui(screen)
@@ -50,6 +54,10 @@ def window_help():  # Раздел помощи
 
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == button_cancel:
+                    running = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
                     running = False
 
             manager.process_events(event)
