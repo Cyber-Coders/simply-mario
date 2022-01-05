@@ -13,7 +13,7 @@ def window_records():  # Раздел рекордов
     clock = pygame.time.Clock()
     running = True
     image = pygame.image.load('data/sprites/records.png')
-    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1000, 600), (190, 50)), text='Back',
+    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1040, 600), (190, 50)), text='Back',
                                                  manager=manager)
 
     while running:
@@ -43,7 +43,7 @@ def window_help():  # Раздел помощи
     clock = pygame.time.Clock()
     manager = pygame_gui.UIManager((1280, 720), 'theme.json')
     running = True
-    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1000, 600), (190, 50)), text='Back',
+    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1040, 600), (190, 50)), text='Back',
                                                  manager=manager)
     image = pygame.image.load('data/sprites/help.png')
     screen.blit(image, (0, 0))
