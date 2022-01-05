@@ -14,7 +14,7 @@ def game_plot():  # Сюжет игры
     pygame.mixer.music.pause()
     count = 1
     running = True
-    image = pygame.image.load('data/sprites/starter_template.tif')
+    image = pygame.image.load('data/sprites/starter_template.jpg')
     image_2 = pygame.image.load('data/sprites/s_1.png')
     button_continue = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1010, 650), (260, 55)), text='Continue',
                                                    manager=manager)
