@@ -2,6 +2,7 @@ import sys
 
 import pygame
 import pygame_gui
+import time
 
 from main import Game
 
@@ -12,7 +13,6 @@ def window_records():  # Раздел рекордов
     clock = pygame.time.Clock()
     running = True
     image = pygame.image.load('data/sprites/records.png')
-    screen.blit(image, (0, 0))
     button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1000, 600), (190, 50)), text='Back',
                                                  manager=manager)
 
@@ -33,6 +33,7 @@ def window_records():  # Раздел рекордов
 
             manager.process_events(event)
         manager.update(time_delta)
+        screen.blit(image, (0, 0))
         manager.draw_ui(screen)
         pygame.display.flip()
 
@@ -64,6 +65,7 @@ def window_help():  # Раздел помощи
 
             manager.process_events(event)
         manager.update(time_delta)
+        screen.blit(image, (0, 0))
         manager.draw_ui(screen)
         pygame.display.flip()
 
