@@ -4,28 +4,43 @@ import sys
 
 import config
 import pygame
+import pygame_gui
 
 
 class Game:
     def __init__(self):
-        self.size = self.width, self.height = config.SIZE
-        self.screen = pygame.display.set_mode(self.size)
+        pass
 
-    def start_game(self):  # Первый уровень игры
-        clock = pygame.time.Clock()
 
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit(0)
+def game_plot():  # Сюжет игры
+    screen = pygame.display.set_mode((1280, 720))
+    manager = pygame_gui.UIManager((1280, 720), 'theme.json')
+    clock = pygame.time.Clock()
+    pygame.mixer.music.pause()
+    count = 1
+    running = True
+    image = pygame.image.load('data/sprites/starter_template.jpg')
+    button_continue = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1010, 650), (260, 55)),
+                                                   text='Continue', manager=manager)
 
-            self.screen.fill((0, 255, 0))
-            clock.tick(config.FPS)
+    while running:
+        time_delta = clock.tick(30) / 1000.0
 
-            pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit(0)
 
-    def update(self):
-        self.screen.fill((0, 255, 0))
+            if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                if event.ui_element == button_continue:
+                    count += 1
+
+            manager.process_events(event)
+        manager.update(time_delta)
+        if count == 1:
+            screen.blit(image, (0, 0))
+
+        manager.draw_ui(screen)
+        pygame.display.flip()
 
 
 def start_menu():  # Запуск меню
@@ -33,7 +48,23 @@ def start_menu():  # Запуск меню
     menu.menu()
 
 
-if __name__ == "__main__":
+def main():
     pygame.init()
-    game = Game()
     start_menu()
+    size = config.SIZE
+    screen = pygame.display.set_mode(size)
+
+    clock = pygame.time.Clock()
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        screen.fill((0, 255, 0))
+        clock.tick(config.FPS)
+        pygame.display.flip()
+
+
+if __name__ == "__main__":
+    main()
