@@ -45,7 +45,7 @@ def game_plot():  # Сюжет игры
 def window_records():  # Раздел рекордов
     screen = pygame.display.set_mode((1280, 720))
     manager = pygame_gui.UIManager((1280, 720), 'theme.json')
-    pygame.mixer.music.stop()
+
     clock = pygame.time.Clock()
     running = True
     image = pygame.image.load('data/sprites/records.png')
