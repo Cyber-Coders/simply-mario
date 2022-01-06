@@ -35,6 +35,11 @@ def game_plot():  # Сюжет игры
                     count += 1
 
             manager.process_events(event)
+
+        if count == 2:
+            running = False
+            main()
+
         manager.update(time_delta)
         if count == 1:
             screen.blit(image, (0, 0))
@@ -50,7 +55,6 @@ def start_menu():  # Запуск меню
 
 def main():
     pygame.init()
-    start_menu()
     size = config.SIZE
     screen = pygame.display.set_mode(size)
 
@@ -59,7 +63,7 @@ def main():
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                sys.exit(0)
 
         screen.fill((0, 255, 0))
         clock.tick(config.FPS)
@@ -67,4 +71,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    start_menu()
