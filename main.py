@@ -7,6 +7,17 @@ import pygame
 import pygame_gui
 
 
+class Map:
+    def __init__(self):
+        pass
+
+
+class Player:
+    def __init__(self):
+        pass
+
+
+
 class Game:
     def __init__(self):
         pass
