@@ -1,7 +1,6 @@
 from menu import *
-
 import sys
-
+import time
 import config
 import pygame
 import pygame_gui
@@ -20,7 +19,15 @@ class Player:
 
 class Game:
     def __init__(self):
-        pass
+        self.size = config.SIZE
+        self.screen = pygame.display.set_mode(self.size)
+
+        self.clock = pygame.time.Clock()
+
+    def update(self):
+        self.screen.fill((0, 255, 0))
+        self.clock.tick(config.FPS)
+        pygame.display.flip()
 
 
 def game_plot():  # Сюжет игры
@@ -65,21 +72,28 @@ def start_menu():  # Запуск меню
 
 
 def main():
-    pygame.init()
-    size = config.SIZE
-    screen = pygame.display.set_mode(size)
-
+    screen = pygame.display.set_mode((1280, 720))
+    frame = 1
+    frame_image = pygame.image.load(f'data/sprites/start/{frame}.png')
+    screen.blit(frame_image, (0, 0))
     clock = pygame.time.Clock()
+
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
 
-        screen.fill((0, 255, 0))
+        if frame < 24:
+            frame += 1
+
+        frame_image = pygame.image.load(f'data/sprites/start/{frame}.png')
+        screen.blit(frame_image, (0, 0))
+
         clock.tick(config.FPS)
         pygame.display.flip()
 
 
 if __name__ == "__main__":
+    start_animation()
     start_menu()
