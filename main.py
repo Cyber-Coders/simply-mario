@@ -16,7 +16,6 @@ class Player:
         pass
 
 
-
 class Game:
     def __init__(self):
         self.size = config.SIZE
@@ -66,12 +65,7 @@ def game_plot():  # Сюжет игры
         pygame.display.flip()
 
 
-def start_menu():  # Запуск меню
-    menu = Menu()
-    menu.menu()
-
-
-def main():
+def start_animation():  # Анимация запуска игры
     screen = pygame.display.set_mode((1280, 720))
     frame = 1
     frame_image = pygame.image.load(f'data/sprites/start/{frame}.png')
@@ -90,6 +84,29 @@ def main():
         frame_image = pygame.image.load(f'data/sprites/start/{frame}.png')
         screen.blit(frame_image, (0, 0))
 
+        if frame == 24:
+            time.sleep(2)
+            running = False
+
+        clock.tick(config.FPS)
+        pygame.display.flip()
+
+
+def start_menu():  # Запуск меню
+    menu = Menu()
+    menu.menu()
+
+
+def main():
+    screen = pygame.display.set_mode((1280, 720))
+    clock = pygame.time.Clock()
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit(0)
+        screen.fill((255, 0, 0))
         clock.tick(config.FPS)
         pygame.display.flip()
 
