@@ -100,7 +100,6 @@ def start_menu():  # Запуск меню
 def main():
     screen = pygame.display.set_mode((1280, 720))
     clock = pygame.time.Clock()
-    pygame.mixer.music.stop()
 
     running = True
     while running:
