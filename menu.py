@@ -1,123 +1,117 @@
-from main import *
-
-
+from menu import *
+import sys
+import time
+import config
+import pygame
 import pygame_gui
 
 
-def window_records():  # Раздел рекордов
-    screen = pygame.display.set_mode((1280, 720))
-    manager = pygame_gui.UIManager((1280, 720), 'theme.json')
-
-    clock = pygame.time.Clock()
-    running = True
-    image = pygame.image.load('data/sprites/records.png')
-    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1040, 600), (190, 50)), text='Back',
-                                                 manager=manager)
-
-    while running:
-        time_delta = clock.tick(config.FPS) / 1000.0
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit(0)
-
-            if event.type == pygame_gui.UI_BUTTON_PRESSED:
-                if event.ui_element == button_cancel:
-                    running = False
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
-
-            manager.process_events(event)
-        manager.update(time_delta)
-        screen.blit(image, (0, 0))
-        manager.draw_ui(screen)
-        pygame.display.flip()
-
-
-def window_help():  # Раздел помощи
-    screen = pygame.display.set_mode((1280, 720))
-    clock = pygame.time.Clock()
-    manager = pygame_gui.UIManager((1280, 720), 'theme.json')
-    running = True
-    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1040, 600), (190, 50)), text='Back',
-                                                 manager=manager)
-    image = pygame.image.load('data/sprites/help.png')
-    screen.blit(image, (0, 0))
-
-    while running:
-        time_delta = clock.tick(config.FPS) / 1000.0
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit(0)
-
-            if event.type == pygame_gui.UI_BUTTON_PRESSED:
-                if event.ui_element == button_cancel:
-                    running = False
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
-
-            manager.process_events(event)
-        manager.update(time_delta)
-        screen.blit(image, (0, 0))
-        manager.draw_ui(screen)
-        pygame.display.flip()
-
-
-class Menu(Game):  # Главное меню
+class Map:
     def __init__(self):
-        super().__init__()
-        pygame.init()
-        pygame.font.init()
-        pygame.mixer.init()
-        pygame.mixer.music.load('data/sounds/super-mario-saundtrek.mp3')
-        pygame.mixer.music.play(-1)
-        self.game = Game()
-        self.screen = pygame.display.set_mode((1280, 720))
-        self.background = pygame.Surface((1290, 720))
-        self.manager = pygame_gui.UIManager((1280, 720), 'theme.json')
-        self.button_start = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((800, 200), (170, 60)), text='Start',
-                                                         manager=self.manager)
-        self.button_records = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((770, 270), (230, 60)),
-                                                           text='Records',
-                                                           manager=self.manager)
-        self.button_help = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((810, 340), (140, 60)), text='Help',
-                                                        manager=self.manager)
-        self.button_quit = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((810, 410), (150, 60)), text='Quit',
-                                                        manager=self.manager)
+        pass
 
-    def menu(self):  # Метод отображения главного меню
-        clock = pygame.time.Clock()
-        image = pygame.image.load('data/sprites/background.png')
 
-        running = True
+class Player:
+    def __init__(self):
+        pass
 
-        while running:
-            time_delta = clock.tick(config.FPS) / 1000.0
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
+class Game:
+    def __init__(self):
+        self.size = config.SIZE
+        self.screen = pygame.display.set_mode(self.size)
 
-                if event.type == pygame_gui.UI_BUTTON_PRESSED:
-                    if event.ui_element == self.button_start:
-                        game_plot()
+        self.clock = pygame.time.Clock()
 
-                    if event.ui_element == self.button_quit:
-                        running = False
+    def update(self):
+        self.screen.fill((0, 255, 0))
+        self.clock.tick(config.FPS)
+        pygame.display.flip()
 
-                    if event.ui_element == self.button_records:
-                        window_records()
 
-                    if event.ui_element == self.button_help:
-                        window_help()
+def game_plot():  # Сюжет игры
+    screen = pygame.display.set_mode((1280, 720))
+    manager = pygame_gui.UIManager((1280, 720), 'theme.json')
+    clock = pygame.time.Clock()
+    pygame.mixer.music.pause()
+    count = 1
+    running = True
+    image = pygame.image.load('data/sprites/starter_template.jpg')
+    button_continue = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1010, 650), (260, 55)),
+                                                   text='Continue', manager=manager)
 
-                self.manager.process_events(event)
-            self.manager.update(time_delta)
-            self.screen.blit(image, (0, 0))
-            self.manager.draw_ui(self.screen)
-            pygame.display.flip()
+    while running:
+        time_delta = clock.tick(30) / 1000.0
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit(0)
+
+            if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                if event.ui_element == button_continue:
+                    count += 1
+
+            manager.process_events(event)
+
+        if count == 2:
+            running = False
+            main()
+
+        manager.update(time_delta)
+        if count == 1:
+            screen.blit(image, (0, 0))
+
+        manager.draw_ui(screen)
+        pygame.display.flip()
+
+
+def start_animation():  # Анимация запуска игры
+    screen = pygame.display.set_mode((1280, 720))
+    frame = 1
+    frame_image = pygame.image.load(f'data/sprites/start/{frame}.png')
+    screen.blit(frame_image, (0, 0))
+    clock = pygame.time.Clock()
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit(0)
+
+        if frame < 24:
+            frame += 1
+
+        frame_image = pygame.image.load(f'data/sprites/start/{frame}.png')
+        screen.blit(frame_image, (0, 0))
+
+        if frame == 24:
+            time.sleep(2)
+            running = False
+
+        clock.tick(config.FPS)
+        pygame.display.flip()
+
+
+def start_menu():  # Запуск меню
+    menu = Menu()
+    menu.menu()
+
+
+def main():
+    screen = pygame.display.set_mode((1280, 720))
+    clock = pygame.time.Clock()
+    pygame.mixer.music.stop()
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit(0)
+        screen.fill((255, 0, 0))
+        clock.tick(config.FPS)
+        pygame.display.flip()
+
+
+if __name__ == "__main__":
+    start_animation()
+    start_menu()
