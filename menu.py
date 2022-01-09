@@ -2,6 +2,8 @@ from main import *
 
 
 import pygame_gui
+import sqlite3
+import pygame
 
 
 def window_records():  # Раздел рекордов
@@ -76,6 +78,12 @@ class Menu(Game):  # Главное меню
         pygame.mixer.init()
         pygame.mixer.music.load('data/sounds/super-mario-saundtrek.mp3')
         pygame.mixer.music.play(-1)
+
+        self.con = sqlite3.connect("BD.db")
+        self.cur = self.con.cursor()
+        self.result = self.cur.execute("""SELECT display FROM Plot""").fetchall()
+        self.display = self.result[0][0]
+
         self.game = Game()
         self.screen = pygame.display.set_mode((1280, 720))
         self.background = pygame.Surface((1290, 720))
@@ -91,6 +99,7 @@ class Menu(Game):  # Главное меню
                                                         manager=self.manager)
 
     def menu(self):  # Метод отображения главного меню
+        print(self.display)
         clock = pygame.time.Clock()
         image = pygame.image.load('data/sprites/background.png')
 
@@ -105,7 +114,14 @@ class Menu(Game):  # Главное меню
 
                 if event.type == pygame_gui.UI_BUTTON_PRESSED:
                     if event.ui_element == self.button_start:
-                        game_plot()
+                        if self.display == 0:
+                            self.result = self.cur.execute("""Update Plot set display = 1""").fetchall()
+                            self.con.commit()
+                            self.con.close()
+                            game_plot()
+
+                        if self.display == 1:
+                            main()
 
                     if event.ui_element == self.button_quit:
                         running = False
