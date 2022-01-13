@@ -70,7 +70,7 @@ def window_help():  # Раздел помощи
         pygame.display.flip()
 
 
-class Menu(Game):  # Главное меню
+class Menu:  # Главное меню
     def __init__(self):
         super().__init__()
         pygame.init()
@@ -84,7 +84,6 @@ class Menu(Game):  # Главное меню
         self.result = self.cur.execute("""SELECT display FROM Plot""").fetchall()
         self.display = self.result[0][0]
 
-        self.game = Game()
         self.screen = pygame.display.set_mode((1280, 720))
         self.background = pygame.Surface((1290, 720))
         self.manager = pygame_gui.UIManager((1280, 720), 'theme.json')

@@ -4,29 +4,40 @@ import time
 import config
 import pygame
 import pygame_gui
+import pytmx
 
 
-class Map:
+class Map:  # Карта
     def __init__(self):
+        self.map = pytmx.load_pygame("data/maps/map_1.tmx")
+        self.height = self.map.height
+        self.width = self.map.width
+        self.tile_size = self.map.tilewidth
+
+    def render(self, screen):
+        for y in range(self.height):
+            for x in range(self.width):
+                image = self.map.get_tile_image(x, y, 0)
+                screen.blit(image, (x * self.tile_size, y * self.tile_size))
+
+
+class Hero:  # Персонаж
+    def __init__(self, position):
+        self.x, self.y = position
+
+    def get_position(self):
+        return self.x, self.y
+
+    def render(self):
         pass
 
 
-class Player:
-    def __init__(self):
-        pass
+class Game: # Игра
+    def __init__(self, map_1):
+        self.map_1 = map_1
 
-
-class Game:
-    def __init__(self):
-        self.size = config.SIZE
-        self.screen = pygame.display.set_mode(self.size)
-
-        self.clock = pygame.time.Clock()
-
-    def update(self):
-        self.screen.fill((0, 255, 0))
-        self.clock.tick(config.FPS)
-        pygame.display.flip()
+    def render(self, screen):
+        self.map_1.render(screen)
 
 
 def game_plot():  # Сюжет игры
@@ -102,12 +113,16 @@ def main():
     clock = pygame.time.Clock()
     pygame.mixer.music.stop()
 
+    map_1 = Map()
+    game = Game(map_1)
+
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
-        screen.fill((255, 0, 0))
+
+        game.render(screen)
         clock.tick(config.FPS)
         pygame.display.flip()
 
