@@ -7,12 +7,32 @@ import pygame_gui
 import pytmx
 
 
-class Map:  # Карта
+# Объявление констант
+TILE_SIZE = 8
+SCROLL = [0, 0]
+
+
+class Camera:
     def __init__(self):
+        self.dx = 0
+        self.dy = 0
+
+    def apply(self, obj):
+        obj.rect.x += self.dx
+        obj.rect.y += self.dy
+
+    def update(self, target):
+        self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
+        self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
+
+
+class Map:  # Карта
+    def __init__(self, free_tiles):
         self.map = pytmx.load_pygame("data/maps/map_1.tmx")
         self.height = self.map.height
         self.width = self.map.width
         self.tile_size = self.map.tilewidth
+        self.free_tiles = free_tiles
 
     def render(self, screen):
         for y in range(self.height):
@@ -20,24 +40,45 @@ class Map:  # Карта
                 image = self.map.get_tile_image(x, y, 0)
                 screen.blit(image, (x * self.tile_size, y * self.tile_size))
 
+    def get_tile_id(self, position):
+        return self.map.tiledgidmap[self.map.get_tile_gid(*position, 0)]
+
+    def is_free(self, position):
+        return self.get_tile_id(position) in self.free_tiles
+
 
 class Hero:  # Персонаж
     def __init__(self, position):
         self.x, self.y = position
 
+    def set_postion(self, position):
+        self.x, self.y = position
+
     def get_position(self):
         return self.x, self.y
 
-    def render(self):
-        pass
+    def render(self, screen):
+        center = self.x * TILE_SIZE + TILE_SIZE // 2, self.y * TILE_SIZE + TILE_SIZE // 2
+        pygame.draw.circle(screen, (255, 255, 255), center, TILE_SIZE // 2)
 
 
 class Game: # Игра
-    def __init__(self, map_1):
+    def __init__(self, map_1, hero):
         self.map_1 = map_1
+        self.hero = hero
 
     def render(self, screen):
         self.map_1.render(screen)
+        self.hero.render(screen)
+
+    def update_hero(self):
+        next_x, next_y = self.hero.get_position()
+        if pygame.key.get_pressed()[pygame.K_LEFT]:
+            next_x -= 10
+        if pygame.key.get_pressed()[pygame.K_RIGHT]:
+            next_x += 10
+        if self.map_1.is_free((next_x, self.hero.y)):
+            self.hero.set_postion((next_x, self.hero.y))
 
 
 def game_plot():  # Сюжет игры
@@ -113,8 +154,9 @@ def main():
     clock = pygame.time.Clock()
     pygame.mixer.music.stop()
 
-    map_1 = Map()
-    game = Game(map_1)
+    map_1 = Map([110])
+    player = Hero((3, 81))
+    game = Game(map_1, player)
 
     running = True
     while running:
@@ -123,6 +165,7 @@ def main():
                 sys.exit(0)
 
         game.render(screen)
+        game.update_hero()
         clock.tick(config.FPS)
         pygame.display.flip()
 
