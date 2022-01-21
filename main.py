@@ -8,7 +8,7 @@ import pytmx
 
 
 # Объявление констант
-TILE_SIZE = 20
+TILE_SIZE = 8
 SCROLL = [0, 0]
 
 
@@ -35,12 +35,10 @@ class Map:  # Карта
         self.free_tiles = free_tiles
 
     def render(self, screen):
-        for i in range(6):
-            for y in range(self.height):
-                for x in range(self.width):
-                    image = self.map.get_tile_image(x, y, i)
-                    if image is not None:
-                        screen.blit(image, (x * TILE_SIZE, y * TILE_SIZE))
+        for y in range(self.height):
+            for x in range(self.width):
+                image = self.map.get_tile_image(x, y, 0)
+                screen.blit(image, (x * TILE_SIZE, y * TILE_SIZE))
 
     def get_tile_id(self, position):
         return self.map.tiledgidmap[self.map.get_tile_gid(*position, 0)]
@@ -52,6 +50,10 @@ class Map:  # Карта
 class Hero:  # Персонаж
     def __init__(self, position):
         self.x, self.y = position
+        self.isJump = False
+        self.jumpCount = 5
+        self.next_y = self.get_position()[1]
+        self.start_y = self.y
 
     def set_postion(self, position):
         self.x, self.y = position
@@ -63,6 +65,20 @@ class Hero:  # Персонаж
         center = self.x * TILE_SIZE + TILE_SIZE // 2, self.y * TILE_SIZE + TILE_SIZE // 2
         pygame.draw.circle(screen, (255, 255, 255), center, TILE_SIZE // 2)
 
+    def jump(self, map_1):
+        if self.isJump:
+            if self.jumpCount >= -5:
+                neg = 1
+                if self.jumpCount < 0:
+                    neg = -1
+                self.next_y -= self.jumpCount ** 2 * 0.1 * neg
+                if map_1.is_free((self.x, self.next_y)):
+                    self.set_postion((self.x, self.next_y))
+                self.jumpCount -= 1
+            else:
+                self.isJump = False
+                self.jumpCount = 5
+
 
 class Game:  # Игра
     def __init__(self, map_1, hero):
@@ -72,6 +88,8 @@ class Game:  # Игра
     def render(self, screen):
         self.map_1.render(screen)
         self.hero.render(screen)
+        self.update_hero()
+        self.hero.jump(self.map_1)
 
     def update_hero(self):
         next_x, next_y = self.hero.get_position()
@@ -81,6 +99,12 @@ class Game:  # Игра
             next_x += 1
         if self.map_1.is_free((next_x, self.hero.y)):
             self.hero.set_postion((next_x, self.hero.y))
+            print(next_y)
+
+    def check(self):
+        if self.hero.y < self.hero.start_y and not self.hero.isJump\
+                and self.map_1.is_free((self.hero.x, self.hero.next_y)):
+            self.hero.y -= 3 ** 2 * 0.1 * -1
 
 
 def game_plot():  # Сюжет игры
@@ -156,8 +180,8 @@ def main():
     clock = pygame.time.Clock()
     pygame.mixer.music.stop()
 
-    map_1 = Map([i for i in range(10000)])
-    player = Hero((0, 12))
+    map_1 = Map([108])
+    player = Hero((0, 85))
     game = Game(map_1, player)
 
     running = True
@@ -165,9 +189,12 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    player.isJump = True
 
         game.render(screen)
-        game.update_hero()
+        game.check()
         clock.tick(config.FPS)
         pygame.display.flip()
 
