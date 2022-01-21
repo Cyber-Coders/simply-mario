@@ -8,7 +8,7 @@ import pytmx
 
 
 # Объявление констант
-TILE_SIZE = 8
+TILE_SIZE = 20
 SCROLL = [0, 0]
 
 
@@ -35,10 +35,12 @@ class Map:  # Карта
         self.free_tiles = free_tiles
 
     def render(self, screen):
-        for y in range(self.height):
-            for x in range(self.width):
-                image = self.map.get_tile_image(x, y, 0)
-                screen.blit(image, (x * self.tile_size, y * self.tile_size))
+        for i in range(6):
+            for y in range(self.height):
+                for x in range(self.width):
+                    image = self.map.get_tile_image(x, y, i)
+                    if image is not None:
+                        screen.blit(image, (x * TILE_SIZE, y * TILE_SIZE))
 
     def get_tile_id(self, position):
         return self.map.tiledgidmap[self.map.get_tile_gid(*position, 0)]
@@ -62,7 +64,7 @@ class Hero:  # Персонаж
         pygame.draw.circle(screen, (255, 255, 255), center, TILE_SIZE // 2)
 
 
-class Game: # Игра
+class Game:  # Игра
     def __init__(self, map_1, hero):
         self.map_1 = map_1
         self.hero = hero
@@ -74,9 +76,9 @@ class Game: # Игра
     def update_hero(self):
         next_x, next_y = self.hero.get_position()
         if pygame.key.get_pressed()[pygame.K_LEFT]:
-            next_x -= 10
+            next_x -= 1
         if pygame.key.get_pressed()[pygame.K_RIGHT]:
-            next_x += 10
+            next_x += 1
         if self.map_1.is_free((next_x, self.hero.y)):
             self.hero.set_postion((next_x, self.hero.y))
 
@@ -154,8 +156,8 @@ def main():
     clock = pygame.time.Clock()
     pygame.mixer.music.stop()
 
-    map_1 = Map([110])
-    player = Hero((3, 81))
+    map_1 = Map([i for i in range(10000)])
+    player = Hero((0, 12))
     game = Game(map_1, player)
 
     running = True
