@@ -55,7 +55,7 @@ class Hero:  # Персонаж
         self.next_y = self.get_position()[1]
         self.start_y = self.y
 
-    def set_postion(self, position):
+    def set_position(self, position):
         self.x, self.y = position
 
     def get_position(self):
@@ -73,7 +73,7 @@ class Hero:  # Персонаж
                     neg = -1
                 self.next_y -= self.jumpCount ** 2 * 0.1 * neg
                 if map_1.is_free((self.x, self.next_y)):
-                    self.set_postion((self.x, self.next_y))
+                    self.set_position((self.x, self.next_y))
                 self.jumpCount -= 1
             else:
                 self.isJump = False
@@ -98,7 +98,7 @@ class Game:  # Игра
         if pygame.key.get_pressed()[pygame.K_RIGHT]:
             next_x += 1
         if self.map_1.is_free((next_x, self.hero.y)):
-            self.hero.set_postion((next_x, self.hero.y))
+            self.hero.set_position((next_x, self.hero.y))
             print(next_y)
 
     def check(self):

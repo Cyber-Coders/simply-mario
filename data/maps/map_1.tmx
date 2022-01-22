@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="350" height="90" tilewidth="8" tileheight="8" infinite="0" nextlayerid="2" nextobjectid="1">
  <tileset firstgid="1" name="tileset" tilewidth="8" tileheight="8" tilecount="207" columns="23">
-  <image source="../../../../Desktop/simply-mario-main/data/maps/tileset.png" width="184" height="72"/>
+  <image source="tileset.png" width="184" height="72"/>
  </tileset>
  <layer id="1" name="Слой тайлов 1" width="350" height="90">
   <data encoding="csv">
