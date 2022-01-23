@@ -1,83 +1,13 @@
-from menu import *
 import sys
 import time
-import config
 import pygame
 import pygame_gui
-import pytmx
 
-
-# Объявление констант
-TILE_SIZE = 8
-SCROLL = [0, 0]
-
-
-class Camera:
-    def __init__(self):
-        self.dx = 0
-        self.dy = 0
-
-    def apply(self, obj):
-        obj.rect.x += self.dx
-        obj.rect.y += self.dy
-
-    def update(self, target):
-        self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
-        self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
-
-
-class Map:  # Карта
-    def __init__(self, free_tiles):
-        self.map = pytmx.load_pygame("data/maps/map_1.tmx")
-        self.height = self.map.height
-        self.width = self.map.width
-        self.tile_size = self.map.tilewidth
-        self.free_tiles = free_tiles
-
-    def render(self, screen):
-        for y in range(self.height):
-            for x in range(self.width):
-                image = self.map.get_tile_image(x, y, 0)
-                screen.blit(image, (x * TILE_SIZE, y * TILE_SIZE))
-
-    def get_tile_id(self, position):
-        return self.map.tiledgidmap[self.map.get_tile_gid(*position, 0)]
-
-    def is_free(self, position):
-        return self.get_tile_id(position) in self.free_tiles
-
-
-class Hero:  # Персонаж
-    def __init__(self, position):
-        self.x, self.y = position
-        self.isJump = False
-        self.jumpCount = 5
-        self.next_y = self.get_position()[1]
-        self.start_y = self.y
-
-    def set_position(self, position):
-        self.x, self.y = position
-
-    def get_position(self):
-        return self.x, self.y
-
-    def render(self, screen):
-        center = self.x * TILE_SIZE + TILE_SIZE // 2, self.y * TILE_SIZE + TILE_SIZE // 2
-        pygame.draw.circle(screen, (255, 255, 255), center, TILE_SIZE // 2)
-
-    def jump(self, map_1):
-        if self.isJump:
-            if self.jumpCount >= -5:
-                neg = 1
-                if self.jumpCount < 0:
-                    neg = -1
-                self.next_y -= self.jumpCount ** 2 * 0.1 * neg
-                if map_1.is_free((self.x, self.next_y)):
-                    self.set_position((self.x, self.next_y))
-                self.jumpCount -= 1
-            else:
-                self.isJump = False
-                self.jumpCount = 5
+from menu import Menu
+from camera import Camera, camera_configure
+from config import TILE_SIZE, W, H, FPS
+from hero import Hero
+from map import Map
 
 
 class Game:  # Игра
@@ -85,31 +15,27 @@ class Game:  # Игра
         self.map_1 = map_1
         self.hero = hero
 
+        self.camera = Camera(
+            camera_configure,
+            self.map_1.width * TILE_SIZE,
+            self.map_1.height * TILE_SIZE)
+
     def render(self, screen):
-        self.map_1.render(screen)
-        self.hero.render(screen)
-        self.update_hero()
-        self.hero.jump(self.map_1)
+        # обновить состояние камеры (вычислить сдвиг отрисовки - описание смотри в файле camera.py)
+        self.camera.update(self.hero)
 
-    def update_hero(self):
-        next_x, next_y = self.hero.get_position()
-        if pygame.key.get_pressed()[pygame.K_LEFT]:
-            next_x -= 1
-        if pygame.key.get_pressed()[pygame.K_RIGHT]:
-            next_x += 1
-        if self.map_1.is_free((next_x, self.hero.y)):
-            self.hero.set_position((next_x, self.hero.y))
-            print(next_y)
+        for row in self.map_1.blocks:
+            for block in row:
+                block.update(self.hero)  # обновить состояние блока, проверить взаимодейтсвие с игроком
+                screen.blit(block.image, self.camera.apply(block))  # нарисовать текущий блок по координатам со сдвигом относительно игрока
+        screen.blit(self.hero.image, self.camera.apply(self.hero))  # нарисовать самого игрока в правильном для камеры месте
 
-    def check(self):
-        if self.hero.y < self.hero.start_y and not self.hero.isJump\
-                and self.map_1.is_free((self.hero.x, self.hero.next_y)):
-            self.hero.y -= 3 ** 2 * 0.1 * -1
+        self.hero.update()  # обновить состояние игрока (нажатия кнопок проверить, координаты пересчитать и т.д.)
 
 
 def game_plot():  # Сюжет игры
-    screen = pygame.display.set_mode((1280, 720))
-    manager = pygame_gui.UIManager((1280, 720), 'theme.json')
+    screen = pygame.display.set_mode((W, H))
+    manager = pygame_gui.UIManager((W, H), 'theme.json')
     clock = pygame.time.Clock()
     pygame.mixer.music.pause()
     count = 1
@@ -119,7 +45,7 @@ def game_plot():  # Сюжет игры
                                                    text='Continue', manager=manager)
 
     while running:
-        time_delta = clock.tick(30) / 1000.0
+        time_delta = clock.tick(FPS) / 1000.0
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -144,7 +70,7 @@ def game_plot():  # Сюжет игры
 
 
 def start_animation():  # Анимация запуска игры
-    screen = pygame.display.set_mode((1280, 720))
+    screen = pygame.display.set_mode((W, H))
     frame = 1
     frame_image = pygame.image.load(f'data/sprites/start/{frame}.png')
     screen.blit(frame_image, (0, 0))
@@ -166,22 +92,17 @@ def start_animation():  # Анимация запуска игры
             time.sleep(2)
             running = False
 
-        clock.tick(config.FPS)
+        clock.tick(FPS)
         pygame.display.flip()
 
 
-def start_menu():  # Запуск меню
-    menu = Menu()
-    menu.menu()
-
-
 def main():
-    screen = pygame.display.set_mode((1280, 720))
+    screen = pygame.display.set_mode((W, H))
     clock = pygame.time.Clock()
     pygame.mixer.music.stop()
 
-    map_1 = Map([108])
-    player = Hero((0, 85))
+    map_1 = Map()
+    player = Hero((200, 200))
     game = Game(map_1, player)
 
     running = True
@@ -189,16 +110,18 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    player.isJump = True
 
+        screen.fill((0, 0, 0))
         game.render(screen)
-        game.check()
-        clock.tick(config.FPS)
+        clock.tick(FPS)
         pygame.display.flip()
 
 
-if __name__ == "__main__":
+def run():
     start_animation()
-    start_menu()
+    menu = Menu()
+    menu.menu(game_plot, main)
+
+
+if __name__ == "__main__":
+    run()

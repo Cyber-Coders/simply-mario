@@ -1,23 +1,24 @@
-from main import *
-
-
+import sys
 import pygame_gui
 import sqlite3
 import pygame
 
+from config import W, H, FPS
+
 
 def window_records():  # Раздел рекордов
-    screen = pygame.display.set_mode((1280, 720))
-    manager = pygame_gui.UIManager((1280, 720), 'theme.json')
+    screen = pygame.display.set_mode((W, H))
+    manager = pygame_gui.UIManager((W, H), 'theme.json')
 
     clock = pygame.time.Clock()
     running = True
     image = pygame.image.load('data/sprites/records.png')
-    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1040, 600), (190, 50)), text='Back',
+    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1040, 600), (190, 50)),
+                                                 text='Back',
                                                  manager=manager)
 
     while running:
-        time_delta = clock.tick(config.FPS) / 1000.0
+        time_delta = clock.tick(FPS) / 1000.0
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -39,9 +40,9 @@ def window_records():  # Раздел рекордов
 
 
 def window_help():  # Раздел помощи
-    screen = pygame.display.set_mode((1280, 720))
+    screen = pygame.display.set_mode((W, H))
     clock = pygame.time.Clock()
-    manager = pygame_gui.UIManager((1280, 720), 'theme.json')
+    manager = pygame_gui.UIManager((W, H), 'theme.json')
     running = True
     button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1040, 600), (190, 50)), text='Back',
                                                  manager=manager)
@@ -49,7 +50,7 @@ def window_help():  # Раздел помощи
     screen.blit(image, (0, 0))
 
     while running:
-        time_delta = clock.tick(config.FPS) / 1000.0
+        time_delta = clock.tick(FPS) / 1000.0
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -76,17 +77,17 @@ class Menu:  # Главное меню
         pygame.init()
         pygame.font.init()
         pygame.mixer.init()
-        pygame.mixer.music.load('data/sounds/super-mario-saundtrek.mp3')
-        pygame.mixer.music.play(-1)
+        # pygame.mixer.music.load('data/sounds/super-mario-saundtrek.mp3')
+        # pygame.mixer.music.play(-1)
 
         self.con = sqlite3.connect("BD.db")
         self.cur = self.con.cursor()
         self.result = self.cur.execute("""SELECT display FROM Plot""").fetchall()
         self.display = self.result[0][0]
 
-        self.screen = pygame.display.set_mode((1280, 720))
-        self.background = pygame.Surface((1290, 720))
-        self.manager = pygame_gui.UIManager((1280, 720), 'theme.json')
+        self.screen = pygame.display.set_mode((W, H))
+        self.background = pygame.Surface((W, H))
+        self.manager = pygame_gui.UIManager((W, H), 'theme.json')
         self.button_start = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((800, 200), (170, 60)), text='Start',
                                                          manager=self.manager)
         self.button_records = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((770, 270), (230, 60)),
@@ -97,15 +98,15 @@ class Menu:  # Главное меню
         self.button_quit = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((810, 410), (150, 60)), text='Quit',
                                                         manager=self.manager)
 
-    def menu(self):  # Метод отображения главного меню
-        print(self.display)
+    def menu(self, game_plot, game_runner):  # Метод отображения главного меню
+        # print(self.display)
         clock = pygame.time.Clock()
         image = pygame.image.load('data/sprites/background.png')
 
         running = True
 
         while running:
-            time_delta = clock.tick(config.FPS) / 1000.0
+            time_delta = clock.tick(FPS) / 1000.0
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -120,7 +121,7 @@ class Menu:  # Главное меню
                             game_plot()
 
                         if self.display == 1:
-                            main()
+                            game_runner()
 
                     if event.ui_element == self.button_quit:
                         running = False
