@@ -77,8 +77,8 @@ class Menu:  # Главное меню
         pygame.init()
         pygame.font.init()
         pygame.mixer.init()
-        # pygame.mixer.music.load('data/sounds/super-mario-saundtrek.mp3')
-        # pygame.mixer.music.play(-1)
+        pygame.mixer.music.load('data/sounds/super-mario-saundtrek.mp3')
+        pygame.mixer.music.play(-1)
 
         self.con = sqlite3.connect("BD.db")
         self.cur = self.con.cursor()
@@ -99,7 +99,7 @@ class Menu:  # Главное меню
                                                         manager=self.manager)
 
     def menu(self, game_plot, game_runner):  # Метод отображения главного меню
-        # print(self.display)
+        print(self.display)
         clock = pygame.time.Clock()
         image = pygame.image.load('data/sprites/background.png')
 

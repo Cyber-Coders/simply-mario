@@ -3,7 +3,7 @@ import pygame
 
 JUMP_POWER = 8
 GRAVITY = 0.3
-MOVE_SPEED = 8
+MOVE_SPEED = 10
 
 
 class Hero:  # Персонаж
@@ -21,20 +21,23 @@ class Hero:  # Персонаж
 
         # rect - хорошая штука, помогает проверять столкновения с другими объёктами, у которых тоже есть rect, ну и координаты хранит
         self.rect = self.image.get_rect()
+        print(self.rect)
         self.rect.x, self.rect.y = position
 
     def update(self):
         '''Тут, думаю, всё понятно'''
         pressed = pygame.key.get_pressed()
-        left = pressed[pygame.K_LEFT]
-        right = pressed[pygame.K_RIGHT]
+        self.left = pressed[pygame.K_LEFT]
+        self.right = pressed[pygame.K_RIGHT]
 
-        if left:
+        print(self.rect.y)
+
+        if self.left:
             self.velocity_x = -MOVE_SPEED
-        if right:
+        if self.right:
             self.velocity_x = MOVE_SPEED
 
-        if not left and not right:
+        if not self.left and not self.right:
             self.velocity_x = 0
 
         if pressed[pygame.K_UP]:
@@ -44,6 +47,9 @@ class Hero:  # Персонаж
 
         if self.velocity_y < 12:
             self.velocity_y += GRAVITY
+
+        if self.rect.y > 675:
+            self.rect.y = 670
 
         self.rect.x += self.velocity_x
         self.rect.y += self.velocity_y
