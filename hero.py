@@ -2,7 +2,7 @@ import pygame
 
 
 JUMP_POWER = 8
-GRAVITY = 0.3
+GRAVITY = 0.5
 MOVE_SPEED = 8
 
 
@@ -10,7 +10,7 @@ class Hero:  # Персонаж
     def __init__(self, position):
         self.velocity_x = 0
         self.velocity_y = 0
-        self.grounded = False  # переключатель для проверки возможности совершения прыжка - если grounded=False, значит игрок находится в воздухе
+        self.grounded = True  # переключатель для проверки возможности совершения прыжка - если grounded=False, значит игрок находится в воздухе
         self.image = pygame.Surface((16, 16))
         pygame.draw.circle(
             self.image,

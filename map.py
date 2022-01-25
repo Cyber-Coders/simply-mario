@@ -6,7 +6,7 @@ from platforms import Floor, FloorBottom, Sky, Other
 
 class Map:  # Карта
     def __init__(self):
-        self.map = pytmx.load_pygame("../simply-mario3/data/maps/map_1.tmx")
+        self.map = pytmx.load_pygame("data/maps/map_1.tmx")
         self.height = self.map.height
         self.width = self.map.width
         self.tile_size = self.map.tilewidth

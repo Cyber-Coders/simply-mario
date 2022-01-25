@@ -5,39 +5,44 @@ import pygame_gui
 
 from menu import Menu
 from camera import Camera, camera_configure
-from config import TILE_SIZE, W, H, FPS
+from config import TILE_SIZE, W, H, FPS, TITLE
 from hero import Hero
 from map import Map
 
+pygame.display.set_caption(TITLE)
 
-class Game:  # Игра
+
+class Game:
+    """класс игры"""
     def __init__(self, map_1, hero):
         self.map_1 = map_1
         self.hero = hero
 
         self.camera = Camera(
-            camera_configure,
             self.map_1.width * TILE_SIZE,
             self.map_1.height * TILE_SIZE)
 
     def render(self, screen):
-        # обновить состояние камеры (вычислить сдвиг отрисовки - описание смотри в файле camera.py)
-        self.camera.update(self.hero)
+        self.camera.update(self.hero)                               # обновить состояние игрока
 
         for row in self.map_1.blocks:
             for block in row:
-                block.update(self.hero)  # обновить состояние блока, проверить взаимодейтсвие с игроком
+                block.update(self.hero)                             # обновить состояние блока, проверить взаимодейтсвие с игроком
                 screen.blit(block.image, self.camera.apply(block))  # нарисовать текущий блок по координатам со сдвигом относительно игрока
+
         screen.blit(self.hero.image, self.camera.apply(self.hero))  # нарисовать самого игрока в правильном для камеры месте
 
-        self.hero.update()  # обновить состояние игрока (нажатия кнопок проверить, координаты пересчитать и т.д.)
+        self.hero.update()                                          # обновить состояние игрока (нажатия кнопок проверить, координаты пересчитать и т.д.)
 
 
-def game_plot():  # Сюжет игры
+def game_plot():
+    """сюжет игры"""
     screen = pygame.display.set_mode((W, H))
     manager = pygame_gui.UIManager((W, H), 'theme.json')
+
     clock = pygame.time.Clock()
     pygame.mixer.music.pause()
+
     count = 1
     running = True
     image = pygame.image.load('data/sprites/starter_template.jpg')
@@ -69,7 +74,8 @@ def game_plot():  # Сюжет игры
         pygame.display.flip()
 
 
-def start_animation():  # Анимация запуска игры
+def start_animation():
+    """анимация запуска игры"""
     screen = pygame.display.set_mode((W, H))
     frame = 1
     frame_image = pygame.image.load(f'data/sprites/start/{frame}.png')
