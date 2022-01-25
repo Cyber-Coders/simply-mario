@@ -1,14 +1,16 @@
-'''
+"""
 Набор платформ типа:
  - Floor - пол (это на который ногами вставать будем),
  - FloorBottom - пол снизу (это нижняя часть платформы, об неё головой будем биться)
+ - RightSide - Правая боковая часть (это боковая часть платформы, которая помогает не проходить в платформу)
+ - LeftSide - Левая боковая часть (это боковая часть платформы, которая помогает не проходить в платформу)
  - Sky - пустое пространство с которым персонаж ни как не взаимодействует, свободно проходит и пролетает через него
  - Other - любые другие блоки, я сделал этот тип платформы для обработки "земли" внутри "пола", потому что Floor
  и FloorBottom будут обрабатывать только верхний и нижний слой "земляной платформы", а средний слой тоже надо обрабатывать.
  Средний слой можно было оставить как Sky, всё равно персонаж с ним тоже не взаимодейтсвует, но я всё же решил сделать
  средний кусок платформы отдельным классом, чтобы в случае надобности для данного слоя можно было прописать свою отдельную
  логику (логика прописывается в методе update, сейчас классы Sky и Other абсолютно идентичны)
-'''
+"""
 
 from pygame import Rect
 
@@ -40,6 +42,18 @@ class FloorBottom(BasePlatform):
                     and (self.rect.top <= hero.rect.top <= self.rect.bottom):
                 hero.rect.top = self.rect.bottom
                 hero.velocity_y = 0
+
+
+class LeftSide(BasePlatform):
+    def update(self, hero):
+        if self.rect.colliderect(hero.rect):
+            hero.rect.right = self.rect.right
+
+
+class RightSide(BasePlatform):
+    def update(self, hero):
+        if self.rect.colliderect(hero.rect):
+            hero.rect.left = self.rect.left
 
 
 class Sky(BasePlatform):
