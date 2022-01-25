@@ -1,7 +1,7 @@
 import pytmx
 
 import config
-from platforms import Floor, FloorBottom, Sky, Other
+from platforms import Floor, FloorBottom, LeftSide, RightSide, Sky, Other
 
 
 class Map:  # Карта
@@ -44,6 +44,22 @@ class Map:  # Карта
                         config.TILE_SIZE,
                         config.TILE_SIZE,
                         image)
+                elif self.get_tile_id((x, y)) in [27, 50, 73]:
+                    new_block = RightSide(
+                        x * config.TILE_SIZE,
+                        y * config.TILE_SIZE,
+                        config.TILE_SIZE,
+                        config.TILE_SIZE,
+                        image
+                    )
+                elif self.get_tile_id((x, y)) in [25, 48, 71]:
+                    new_block = LeftSide(
+                        x * config.TILE_SIZE,
+                        y * config.TILE_SIZE,
+                        config.TILE_SIZE,
+                        config.TILE_SIZE,
+                        image
+                    )
                 elif self.get_tile_id((x, y)) in [108]:
                     new_block = Sky(
                         x * config.TILE_SIZE,
