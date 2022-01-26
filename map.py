@@ -30,21 +30,21 @@ class Map:  # Карта
             for x in range(self.width):
                 image = self.map.get_tile_image(x, y, 0)
 
-                if self.get_tile_id((x, y)) in [25, 26, 27]:
+                if self.get_tile_id((x, y)) in [205, 206, 71, 72]:
                     new_block = Floor(
                         x * config.TILE_SIZE,
                         y * config.TILE_SIZE,
                         config.TILE_SIZE,
                         config.TILE_SIZE,
                         image)
-                elif self.get_tile_id((x, y)) in [71, 72, 73]:
+                elif self.get_tile_id((x, y)) in [105, 106]:
                     new_block = FloorBottom(
                         x * config.TILE_SIZE,
                         y * config.TILE_SIZE,
                         config.TILE_SIZE,
                         config.TILE_SIZE,
                         image)
-                elif self.get_tile_id((x, y)) in [27, 50, 73]:
+                elif self.get_tile_id((x, y)) in [72, 106]:
                     new_block = RightSide(
                         x * config.TILE_SIZE,
                         y * config.TILE_SIZE,
@@ -52,7 +52,7 @@ class Map:  # Карта
                         config.TILE_SIZE,
                         image
                     )
-                elif self.get_tile_id((x, y)) in [25, 48, 71]:
+                elif self.get_tile_id((x, y)) in [71, 105]:
                     new_block = LeftSide(
                         x * config.TILE_SIZE,
                         y * config.TILE_SIZE,
