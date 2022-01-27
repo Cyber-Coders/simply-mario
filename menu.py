@@ -2,7 +2,6 @@ import os
 import sys
 
 import pygame
-import sqlite3
 import pygame_gui
 
 from config import W, H, FPS, DATABASE, MENU_SPRITES_PATH, SOUNDS_PATH, FONTS_PATH
@@ -28,7 +27,7 @@ def window_records():
     games_info = scores_count + " " + ("game" if scores_count[-1] == "1" and scores_count != "11" else "games")
     games_info_text_1 = games_info_font.render(games_info, True, (220, 220, 220))
 
-    level_1_scores = [0] if not(db_scores) else db_scores
+    level_1_scores = [0] if not db_scores else db_scores
 
     min_value_1 = text_font.render(str(min(level_1_scores)), True, (255, 255, 255))
     max_value_1 = text_font.render(str(max(level_1_scores)), True, (255, 255, 255))
@@ -44,7 +43,7 @@ def window_records():
     games_info = scores_count + " " + ("game" if scores_count[-1] == "1" and scores_count != "11" else "games")
     games_info_text_2 = games_info_font.render(games_info, True, (220, 220, 220))
 
-    level_2_scores = [0] if not(db_scores) else db_scores
+    level_2_scores = [0] if not db_scores else db_scores
     min_value_2 = text_font.render(str(min(level_2_scores)), True, (255, 255, 255))
     max_value_2 = text_font.render(str(max(level_2_scores)), True, (255, 255, 255))
     avg_value_2 = text_font.render(str(sum(level_2_scores) // len(level_2_scores)), True, (255, 255, 255))
@@ -159,7 +158,7 @@ class Menu:
         """главное меню"""
         # print(self.display)
         clock = pygame.time.Clock()
-        image = pygame.image.load(os.path.join(MENU_SPRITES_PATH, "background.png"))
+        image = pygame.image.load(os.path.join("data/sprites/background.png"))
 
         running = True
 
