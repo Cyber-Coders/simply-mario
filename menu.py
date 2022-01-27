@@ -1,9 +1,11 @@
+import os
 import sys
-import pygame_gui
-import sqlite3
-import pygame
 
-from config import W, H, FPS, DATABASE
+import pygame
+import sqlite3
+import pygame_gui
+
+from config import W, H, FPS, DATABASE, MENU_SPRITES_PATH, SOUNDS_PATH, FONTS_PATH
 from database import *
 
 db = Database(DATABASE)
@@ -12,8 +14,9 @@ db = Database(DATABASE)
 def window_records():
     screen = pygame.display.set_mode((W, H))
     manager = pygame_gui.UIManager((W, H), 'theme.json')
-    title_font = pygame.font.Font("data/font/font.ttf", 42)
-    text_font = pygame.font.Font("data/font/font.ttf", 30)
+    title_font = pygame.font.Font(os.path.join(FONTS_PATH, "font.ttf"), 42)
+    text_font = pygame.font.Font(os.path.join(FONTS_PATH, "font.ttf"), 30)
+    games_info_font = pygame.font.Font(os.path.join(FONTS_PATH, "font.ttf"), 28)
 
     level_1 = title_font.render("level 1", True, (255, 255, 0))
     min_1 = text_font.render("min", True, (225, 225, 225))
@@ -21,7 +24,12 @@ def window_records():
     avg_1 = text_font.render("avg", True, (225, 225, 225))
 
     db_scores = db.get_scores(1)
+    scores_count = str(len(db_scores))
+    games_info = scores_count + " " + ("game" if scores_count[-1] == "1" and scores_count != "11" else "games")
+    games_info_text_1 = games_info_font.render(games_info, True, (220, 220, 220))
+
     level_1_scores = [0] if not(db_scores) else db_scores
+
     min_value_1 = text_font.render(str(min(level_1_scores)), True, (255, 255, 255))
     max_value_1 = text_font.render(str(max(level_1_scores)), True, (255, 255, 255))
     avg_value_1 = text_font.render(str(sum(level_1_scores) // len(level_1_scores)), True, (255, 255, 255))
@@ -32,6 +40,10 @@ def window_records():
     avg_2 = text_font.render("avg", True, (225, 225, 225))
 
     db_scores = db.get_scores(2)
+    scores_count = str(len(db_scores))
+    games_info = scores_count + " " + ("game" if scores_count[-1] == "1" and scores_count != "11" else "games")
+    games_info_text_2 = games_info_font.render(games_info, True, (220, 220, 220))
+
     level_2_scores = [0] if not(db_scores) else db_scores
     min_value_2 = text_font.render(str(min(level_2_scores)), True, (255, 255, 255))
     max_value_2 = text_font.render(str(max(level_2_scores)), True, (255, 255, 255))
@@ -39,7 +51,7 @@ def window_records():
 
     clock = pygame.time.Clock()
     running = True
-    image = pygame.image.load('data/sprites/records.png')
+    image = pygame.image.load(os.path.join(MENU_SPRITES_PATH, "records.png"))
     button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1040, 600), (190, 50)),
                                                  text='Back',
                                                  manager=manager)
@@ -63,6 +75,7 @@ def window_records():
         manager.update(time_delta)
         screen.blit(image, (0, 0))
         screen.blit(level_1, (604, 196))
+        screen.blit(games_info_text_1, (1000, 205))
         screen.blit(min_1, (604, 250))
         screen.blit(max_1, (804, 250))
         screen.blit(avg_1, (1004, 250))
@@ -71,6 +84,7 @@ def window_records():
         screen.blit(avg_value_1, (1104, 250))
 
         screen.blit(level_2, (604, 356))
+        screen.blit(games_info_text_2, (1000, 364))
         screen.blit(min_2, (604, 410))
         screen.blit(max_2, (804, 410))
         screen.blit(avg_2, (1004, 410))
@@ -89,7 +103,7 @@ def window_help():
     running = True
     button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1040, 600), (190, 50)), text='Back',
                                                  manager=manager)
-    image = pygame.image.load('data/sprites/help.png')
+    image = pygame.image.load(os.path.join(MENU_SPRITES_PATH, "help.png"))
     screen.blit(image, (0, 0))
 
     while running:
@@ -123,7 +137,7 @@ class Menu:
         pygame.init()
         pygame.font.init()
         pygame.mixer.init()
-        pygame.mixer.music.load('data/sounds/soundtrack.mp3')
+        pygame.mixer.music.load(os.path.join(SOUNDS_PATH, "soundtrack.mp3"))
         pygame.mixer.music.play(-1)
 
         self.display = db.get_plot_value()
@@ -145,7 +159,7 @@ class Menu:
         """главное меню"""
         # print(self.display)
         clock = pygame.time.Clock()
-        image = pygame.image.load('data/sprites/background.png')
+        image = pygame.image.load(os.path.join(MENU_SPRITES_PATH, "background.png"))
 
         running = True
 
@@ -175,6 +189,8 @@ class Menu:
                         window_help()
 
                 self.manager.process_events(event)
+
+
 
             self.manager.update(time_delta)
             self.screen.blit(image, (0, 0))
