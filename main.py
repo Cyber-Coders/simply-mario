@@ -1,3 +1,4 @@
+import os.path
 import sys
 import time
 import pygame
@@ -5,7 +6,7 @@ import pygame_gui
 
 from menu import Menu
 from camera import Camera, camera_configure
-from config import TILE_SIZE, W, H, FPS, TITLE
+from config import TILE_SIZE, W, H, FPS, TITLE, PLOT_SPRITES_PATH
 from hero import Hero
 from map import Map
 
@@ -43,9 +44,10 @@ def game_plot():
     clock = pygame.time.Clock()
     pygame.mixer.music.pause()
 
-    count = 1
+    plot = True
+    image_num = 1
     running = True
-    image = pygame.image.load('data/sprites/starter_template.jpg')
+
     button_continue = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1010, 650), (260, 55)),
                                                    text='Continue', manager=manager)
 
@@ -58,16 +60,21 @@ def game_plot():
 
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == button_continue:
-                    count += 1
+                    if image_num < 6:
+                        image_num += 1
+
+                    else:
+                        plot = False
 
             manager.process_events(event)
 
-        if count == 2:
+        if not plot:
             running = False
             main()
 
         manager.update(time_delta)
-        if count == 1:
+        if plot:
+            image = pygame.image.load(os.path.join(PLOT_SPRITES_PATH, f"template_{image_num}.jpg"))
             screen.blit(image, (0, 0))
 
         manager.draw_ui(screen)
