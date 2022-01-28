@@ -44,7 +44,7 @@ class Map:  # Карта
                         config.TILE_SIZE,
                         config.TILE_SIZE,
                         image)
-                elif self.get_tile_id((x, y)) in []:
+                elif self.get_tile_id((x, y)) in [72, 106]:
                     new_block = RightSide(
                         x * config.TILE_SIZE,
                         y * config.TILE_SIZE,
@@ -60,7 +60,7 @@ class Map:  # Карта
                         config.TILE_SIZE,
                         image
                     )
-                elif self.get_tile_id((x, y)) in [108]:
+                elif self.get_tile_id((x, y)) in []:
                     new_block = Sky(
                         x * config.TILE_SIZE,
                         y * config.TILE_SIZE,
