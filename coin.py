@@ -2,7 +2,7 @@ import pygame
 import config
 
 
-# Класс для отображеня монет и взаимодействия с ними
+# Класс для отображения монет и взаимодействия с ними
 class Coin:
     def __init__(self, position):
         # Отрисовка монеты
@@ -22,6 +22,6 @@ class Coin:
     def check(self, position):
         if position[0] == self.rect.x and (position[1] == 606 or position[1] == 607) and self.count == 0:
             self.image.fill((0, 0, 0))
-            config.score += 50
+            config.score += 5
             self.count = 1
             pygame.mixer.music.play(1)

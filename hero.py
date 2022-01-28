@@ -5,7 +5,7 @@ import pygame
 import pyganim
 import sys
 
-JUMP_POWER = 8
+JUMP_POWER = 10
 GRAVITY = 0.5
 MOVE_SPEED = 8
 ANIMATION_DELAY = 1
@@ -69,7 +69,6 @@ class Hero:  # Персонаж
         self.boltAnimLeft.play()
 
     def update(self):
-        '''Тут, думаю, всё понятно'''
         pressed = pygame.key.get_pressed()
         left = pressed[pygame.K_LEFT]
         right = pressed[pygame.K_RIGHT]
