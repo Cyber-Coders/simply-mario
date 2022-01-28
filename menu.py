@@ -189,8 +189,6 @@ class Menu:
 
                 self.manager.process_events(event)
 
-
-
             self.manager.update(time_delta)
             self.screen.blit(image, (0, 0))
             self.manager.draw_ui(self.screen)
