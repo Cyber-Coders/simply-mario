@@ -7,12 +7,9 @@ class Coin:
     def __init__(self, position):
         # Отрисовка монеты
         self.count = 0
-        self.image = pygame.Surface((25, 34))
-        pygame.draw.circle(
-            self.image,
-            (255, 255, 0),
-            (self.image.get_width() // 2, self.image.get_height() // 2),
-            self.image.get_width() // 2)
+        icon = pygame.image.load('data/sprites/coin/animation_1.png')
+        self.image = pygame.Surface((25, 27))
+        self.image.blit(icon, (0, 0))
         self.image.set_colorkey((0, 0, 0))
 
         # Применение положения относительно карты
