@@ -5,9 +5,10 @@ import pygame
 import pygame_gui
 
 from menu import Menu
-from camera import Camera, camera_configure
+from camera import Camera
 from config import TILE_SIZE, W, H, FPS, TITLE, PLOT_SPRITES_PATH
 from hero import Hero
+from Enemy_Goomba import EnemyGoomba
 from map import Map
 
 pygame.display.set_caption(TITLE)
@@ -15,9 +16,10 @@ pygame.display.set_caption(TITLE)
 
 class Game:
     """класс игры"""
-    def __init__(self, map_1, hero):
+    def __init__(self, map_1, hero, enemy_goomba):
         self.map_1 = map_1
         self.hero = hero
+        self.enemy_goomba = enemy_goomba
 
         self.camera = Camera(
             self.map_1.width * TILE_SIZE,
@@ -31,9 +33,12 @@ class Game:
                 block.update(self.hero)                             # обновить состояние блока, проверить взаимодейтсвие с игроком
                 screen.blit(block.image, self.camera.apply(block))  # нарисовать текущий блок по координатам со сдвигом относительно игрока
 
+        screen.blit(self.enemy_goomba.image, self.camera.apply(self.enemy_goomba))
+
         screen.blit(self.hero.image, self.camera.apply(self.hero))  # нарисовать самого игрока в правильном для камеры месте
 
-        self.hero.update()                                          # обновить состояние игрока (нажатия кнопок проверить, координаты пересчитать и т.д.)
+        self.hero.update(self.enemy_goomba.get_position())                                          # обновить состояние игрока (нажатия кнопок проверить, координаты пересчитать и т.д.)
+        self.enemy_goomba.update()
 
 
 def game_plot():
@@ -116,7 +121,11 @@ def main():
 
     map_1 = Map()
     player = Hero((200, 200))
-    game = Game(map_1, player)
+    enemy_goomba = EnemyGoomba((300, 612))
+    game = Game(map_1, player, enemy_goomba)
+
+    font = pygame.font.Font('data/font/font.ttf', 30)
+    text_health = font.render(str(f"Health:{player.health}"), True, (255, 255, 255))
 
     running = True
     while running:
@@ -126,6 +135,7 @@ def main():
 
         screen.fill((0, 0, 0))
         game.render(screen)
+        screen.blit(text_health, (50, 50))
         clock.tick(FPS)
         pygame.display.flip()
 
