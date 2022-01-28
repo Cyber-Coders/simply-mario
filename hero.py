@@ -69,6 +69,7 @@ class Hero:  # Персонаж
 
     def update(self):
         '''Тут, думаю, всё понятно'''
+        print(self.rect.x)
         pressed = pygame.key.get_pressed()
         left = pressed[pygame.K_LEFT]
         right = pressed[pygame.K_RIGHT]

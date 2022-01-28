@@ -19,7 +19,7 @@ pygame.display.set_caption(TITLE)
 
 # класс игры, который отображает все различные элементы и приводит для сдвига камеры для персонажа
 class Game:
-    def __init__(self, map_1, hero, enemy_goomba, coin_1, coin_2, coin_3):
+    def __init__(self, map_1, hero, enemy_goomba, coin_1, coin_2, coin_3, coin_4, coin_5, coin_6):
         # Задаём переменным значение
         self.map_1 = map_1
         self.hero = hero
@@ -27,6 +27,10 @@ class Game:
         self.coin_1 = coin_1
         self.coin_2 = coin_2
         self.coin_3 = coin_3
+
+        self.coin_4 = coin_4
+        self.coin_5 = coin_5
+        self.coin_6 = coin_6
 
         self.camera = Camera(
             self.map_1.width * TILE_SIZE,
@@ -47,6 +51,10 @@ class Game:
         screen.blit(self.coin_2.image, self.camera.apply(self.coin_2))
         screen.blit(self.coin_3.image, self.camera.apply(self.coin_3))
 
+        screen.blit(self.coin_4.image, self.camera.apply(self.coin_4))
+        screen.blit(self.coin_5.image, self.camera.apply(self.coin_5))
+        screen.blit(self.coin_6.image, self.camera.apply(self.coin_6))
+
         # Отображение персонажа
         screen.blit(self.hero.image, self.camera.apply(self.hero))
 
@@ -55,8 +63,16 @@ class Game:
         self.coin_2.check(self.hero.get_position())
         self.coin_3.check(self.hero.get_position())
 
+        self.coin_4.check(self.hero.get_position())
+        self.coin_5.check(self.hero.get_position())
+        self.coin_6.check(self.hero.get_position())
+
         # Методы изменяющие положение персонажа, а так же проверки совпадения координат игрока с врагом
         self.hero.update()
+        self.enemy_goomba.check(self.hero.get_position())
+        self.enemy_goomba.update()
+        self.enemy_goomba.check(self.hero.get_position())
+        self.enemy_goomba.update()
         self.enemy_goomba.check(self.hero.get_position())
         self.enemy_goomba.update()
 
@@ -150,7 +166,11 @@ def main():
     coin_1 = Coin((240, 612))
     coin_2 = Coin((272, 612))
     coin_3 = Coin((304, 612))
-    game = Game(map_1, player, enemy_goomba, coin_1, coin_2, coin_3)
+
+    coin_4 = Coin((1208, 612))
+    coin_5 = Coin((1240, 612))
+    coin_6 = Coin((1272, 612))
+    game = Game(map_1, player, enemy_goomba, coin_1, coin_2, coin_3, coin_4, coin_5, coin_6)
 
     font = pygame.font.Font('data/font/font.ttf', 30)
 
