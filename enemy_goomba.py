@@ -1,8 +1,15 @@
 import pygame
+import pyganim
+
 import config
 
 # Применение констант
 MOVE_SPEED = 8
+ANIMATION_DELAY = 1
+
+ANIMATION_RIGHT = [('data/sprites/enemy/animation_1.png'),
+                   ('data/sprites/enemy/animation_2.png'),
+                   ('data/sprites/enemy/animation_3.png')]
 
 
 # Класс, который отображает врага
@@ -21,8 +28,17 @@ class EnemyGoomba:
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = position
 
+        boltAnim = []
+        for anim in ANIMATION_RIGHT:
+            boltAnim.append((anim, ANIMATION_DELAY))
+        self.boltAnimRight = pyganim.PygAnimation(boltAnim)
+        self.boltAnimRight.play()
+
     # Метод, который перемещает врага
     def update(self):
+        self.image.fill((0, 0, 0))
+        self.boltAnimRight.set_colorkey((255, 255, 255))
+        self.boltAnimRight.blit(self.image, (0, 0))
         if self.rect.x < 19952:
             self.rect.x += MOVE_SPEED
         else:

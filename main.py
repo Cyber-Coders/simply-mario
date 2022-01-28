@@ -146,7 +146,7 @@ def main():
 
     map_1 = Map()
     player = Hero((200, 200))
-    enemy_goomba = EnemyGoomba((300, 612))
+    enemy_goomba = EnemyGoomba((300, 615))
     coin_1 = Coin((240, 612))
     coin_2 = Coin((272, 612))
     coin_3 = Coin((304, 612))
