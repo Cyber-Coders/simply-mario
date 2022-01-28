@@ -1,4 +1,4 @@
-from Enemy_Goomba import EnemyGoomba
+from enemy_goomba import EnemyGoomba
 
 import pygame
 import pyganim
@@ -29,8 +29,6 @@ class Hero:  # Персонаж
     def __init__(self, position):
         self.velocity_x = 0
         self.velocity_y = 0
-
-        self.health = 2
 
         self.grounded = True  # переключатель для проверки возможности совершения прыжка - если grounded=False, значит игрок находится в воздухе
         self.image = pygame.Surface((25, 34))
@@ -69,17 +67,11 @@ class Hero:  # Персонаж
         self.boltAnimLeft = pyganim.PygAnimation(boltAnim)
         self.boltAnimLeft.play()
 
-    def update(self, enemy_position):
+    def update(self):
         '''Тут, думаю, всё понятно'''
         pressed = pygame.key.get_pressed()
         left = pressed[pygame.K_LEFT]
         right = pressed[pygame.K_RIGHT]
-
-        if enemy_position[0] == self.rect.x and enemy_position[1] == self.rect.y:
-            self.health -= 1
-
-        if self.health == 0:
-            pass
 
         if left:
             self.velocity_x = -MOVE_SPEED
@@ -115,3 +107,6 @@ class Hero:  # Персонаж
 
         self.rect.x += self.velocity_x
         self.rect.y += self.velocity_y
+
+    def get_position(self):
+        return self.rect.x, self.rect.y

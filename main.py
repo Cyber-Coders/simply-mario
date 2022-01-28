@@ -4,11 +4,12 @@ import time
 import pygame
 import pygame_gui
 
+import config
 from menu import Menu
 from camera import Camera
 from config import TILE_SIZE, W, H, FPS, TITLE, PLOT_SPRITES_PATH
 from hero import Hero
-from Enemy_Goomba import EnemyGoomba
+from enemy_goomba import EnemyGoomba
 from map import Map
 
 pygame.display.set_caption(TITLE)
@@ -37,7 +38,8 @@ class Game:
 
         screen.blit(self.hero.image, self.camera.apply(self.hero))  # нарисовать самого игрока в правильном для камеры месте
 
-        self.hero.update(self.enemy_goomba.get_position())                                          # обновить состояние игрока (нажатия кнопок проверить, координаты пересчитать и т.д.)
+        self.hero.update()                                          # обновить состояние игрока (нажатия кнопок проверить, координаты пересчитать и т.д.)
+        self.enemy_goomba.check(self.hero.get_position())
         self.enemy_goomba.update()
 
 
@@ -125,10 +127,11 @@ def main():
     game = Game(map_1, player, enemy_goomba)
 
     font = pygame.font.Font('data/font/font.ttf', 30)
-    text_health = font.render(str(f"Health:{player.health}"), True, (255, 255, 255))
 
     running = True
     while running:
+        text_health = font.render(str(f"Health:{config.health}"), True, (255, 255, 255))
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)

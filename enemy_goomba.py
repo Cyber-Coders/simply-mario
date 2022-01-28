@@ -1,4 +1,5 @@
 import pygame
+import config
 
 
 MOVE_SPEED = 8
@@ -23,6 +24,10 @@ class EnemyGoomba:
         else:
             self.rect.x = 200
 
-    def get_position(self):
-        return self.rect.x, self.rect.y
+    def check(self, position):
+        if position[0] == self.rect.x and (position[1] == 606 or position[1] == 607):
+            config.health -= 1
+
+        if config.health == 0:
+            pass
 
