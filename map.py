@@ -5,8 +5,8 @@ from platforms import Floor, FloorBottom, LeftSide, RightSide, Sky, Other
 
 
 class Map:  # Карта
-    def __init__(self):
-        self.map = pytmx.load_pygame("data/maps/map_1.tmx")
+    def __init__(self, name):
+        self.map = pytmx.load_pygame(f"data/maps/{name}.tmx")
         self.height = self.map.height
         self.width = self.map.width
         self.tile_size = self.map.tilewidth

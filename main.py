@@ -77,6 +77,28 @@ class Game:
         self.enemy_goomba.update()
 
 
+class Game2:
+    def __init__(self, map_2, hero):
+        self.map_2 = map_2
+        self.hero = hero
+
+        self.camera = Camera(
+            self.map_2.width * TILE_SIZE,
+            self.map_2.height * TILE_SIZE)
+
+    def render(self, screen):
+        self.camera.update(self.hero)
+
+        for row in self.map_2.blocks:
+            for block in row:
+                block.update(self.hero)
+                screen.blit(block.image, self.camera.apply(block))
+
+        screen.blit(self.hero.image, self.camera.apply(self.hero))
+
+        self.hero.update()
+
+
 # Метод в котором будет происходить изображение начального сюжета игры
 def game_plot():
     screen = pygame.display.set_mode((W, H))
@@ -160,8 +182,9 @@ def main():
     clock = pygame.time.Clock()
     pygame.mixer.music.stop()
 
-    map_1 = Map()
-    player = Hero((200, 200))
+    map_1 = Map('map_1')
+    map_2 = Map('map_2')
+    player = Hero((19800, 200))
     enemy_goomba = EnemyGoomba((300, 615))
     coin_1 = Coin((240, 612))
     coin_2 = Coin((272, 612))
@@ -171,6 +194,7 @@ def main():
     coin_5 = Coin((1240, 612))
     coin_6 = Coin((1272, 612))
     game = Game(map_1, player, enemy_goomba, coin_1, coin_2, coin_3, coin_4, coin_5, coin_6)
+    game_2 = Game2(map_2, player)
 
     font = pygame.font.Font('data/font/font.ttf', 30)
 
@@ -185,7 +209,10 @@ def main():
 
         # Отображения всех игровых объектов
         screen.fill((0, 0, 0))
-        game.render(screen)
+        if not config.check_map_2:
+            game.render(screen)
+        else:
+            game_2.render(screen)
         screen.blit(text_health, (30, 30))
         screen.blit(text_score, (30, 60))
         clock.tick(FPS)

@@ -1,3 +1,4 @@
+import config
 from enemy_goomba import EnemyGoomba
 
 import pygame
@@ -107,6 +108,11 @@ class Hero:  # Персонаж
 
         self.rect.x += self.velocity_x
         self.rect.y += self.velocity_y
+
+        if self.rect.x >= 19984:
+            config.check_map_2 = True
+            self.rect.x = 200
+            self.rect.y = 200
 
     def get_position(self):
         return self.rect.x, self.rect.y
