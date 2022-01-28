@@ -78,9 +78,13 @@ class Game:
 
 
 class Game2:
-    def __init__(self, map_2, hero):
+    def __init__(self, map_2, hero, enemy_goomba):
         self.map_2 = map_2
         self.hero = hero
+        self.enemy_goomba = enemy_goomba
+
+        self.enemy_goomba.rect.x = 300
+        self.enemy_goomba.rect.y = 615
 
         self.camera = Camera(
             self.map_2.width * TILE_SIZE,
@@ -95,8 +99,15 @@ class Game2:
                 screen.blit(block.image, self.camera.apply(block))
 
         screen.blit(self.hero.image, self.camera.apply(self.hero))
+        screen.blit(self.enemy_goomba.image, self.camera.apply(self.enemy_goomba))
 
         self.hero.update()
+        self.enemy_goomba.check(self.hero.get_position())
+        self.enemy_goomba.update()
+        self.enemy_goomba.check(self.hero.get_position())
+        self.enemy_goomba.update()
+        self.enemy_goomba.check(self.hero.get_position())
+        self.enemy_goomba.update()
 
 
 # Метод в котором будет происходить изображение начального сюжета игры
@@ -194,7 +205,7 @@ def main():
     coin_5 = Coin((1240, 612))
     coin_6 = Coin((1272, 612))
     game = Game(map_1, player, enemy_goomba, coin_1, coin_2, coin_3, coin_4, coin_5, coin_6)
-    game_2 = Game2(map_2, player)
+    game_2 = Game2(map_2, player, enemy_goomba)
 
     font = pygame.font.Font('data/font/font.ttf', 30)
 
