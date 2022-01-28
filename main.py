@@ -3,8 +3,8 @@ import sys
 import time
 import pygame
 import pygame_gui
-
 import config
+
 from menu import Menu
 from camera import Camera
 from config import TILE_SIZE, W, H, FPS, TITLE, PLOT_SPRITES_PATH
@@ -13,11 +13,14 @@ from enemy_goomba import EnemyGoomba
 from map import Map
 from Coin import Coin
 
+# Задаём название для окна
 pygame.display.set_caption(TITLE)
 
 
+# класс игры, который отображает все различные элементы и приводит для сдвига камеры для персонажа
 class Game:
     def __init__(self, map_1, hero, enemy_goomba, coin_1, coin_2, coin_3):
+        # Задаём переменным значение
         self.map_1 = map_1
         self.hero = hero
         self.enemy_goomba = enemy_goomba
@@ -29,6 +32,7 @@ class Game:
             self.map_1.width * TILE_SIZE,
             self.map_1.height * TILE_SIZE)
 
+    # Метод для отображения всех объектов в данной игре
     def render(self, screen):
         self.camera.update(self.hero)
 
@@ -37,22 +41,27 @@ class Game:
                 block.update(self.hero)
                 screen.blit(block.image, self.camera.apply(block))
 
+        # Отображение монет относительно карты
         screen.blit(self.enemy_goomba.image, self.camera.apply(self.enemy_goomba))
         screen.blit(self.coin_1.image, self.camera.apply(self.coin_1))
         screen.blit(self.coin_2.image, self.camera.apply(self.coin_2))
         screen.blit(self.coin_3.image, self.camera.apply(self.coin_3))
 
+        # Отображение персонажа
         screen.blit(self.hero.image, self.camera.apply(self.hero))
 
+        # Проверка совпадений координат монеты с игроком (Mario)
         self.coin_1.check(self.hero.get_position())
         self.coin_2.check(self.hero.get_position())
         self.coin_3.check(self.hero.get_position())
 
+        # Методы изменяющие положение персонажа, а так же проверки совпадения координат игрока с врагом
         self.hero.update()
         self.enemy_goomba.check(self.hero.get_position())
         self.enemy_goomba.update()
 
 
+# Метод в котором будет происходить изображение начального сюжета игры
 def game_plot():
     screen = pygame.display.set_mode((W, H))
     manager = pygame_gui.UIManager((W, H), 'theme.json')
@@ -67,6 +76,7 @@ def game_plot():
     button_continue = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1010, 650), (260, 55)),
                                                    text='Continue', manager=manager)
 
+    # Цикл в котором будет происходить проверка положения кнопки, а так же слайда данного сюжета
     while running:
         time_delta = clock.tick(FPS) / 1000.0
 
@@ -74,6 +84,7 @@ def game_plot():
             if event.type == pygame.QUIT:
                 sys.exit(0)
 
+            # Проверка нажатия на кнопки
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == button_continue:
                     if image_num < 6:
@@ -97,6 +108,7 @@ def game_plot():
         pygame.display.flip()
 
 
+# Функция, которая отображает заставку нашей команды
 def start_animation():
     screen = pygame.display.set_mode((W, H))
     frame = 1
@@ -105,6 +117,8 @@ def start_animation():
     clock = pygame.time.Clock()
 
     running = True
+
+    # Цикл, который перебирает элементы анимации с некоторой задержкой
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -125,6 +139,7 @@ def start_animation():
 
 
 def main():
+    # Задаём значения переменным и объектам класса
     screen = pygame.display.set_mode((W, H))
     clock = pygame.time.Clock()
     pygame.mixer.music.stop()
@@ -148,6 +163,7 @@ def main():
             if event.type == pygame.QUIT:
                 sys.exit(0)
 
+        # Отображения всех игровых объектов
         screen.fill((0, 0, 0))
         game.render(screen)
         screen.blit(text_health, (30, 30))
@@ -156,6 +172,7 @@ def main():
         pygame.display.flip()
 
 
+# Функция, которая загружает меню и передаёт в качестве аргумента сюжет
 def run():
     start_animation()
     menu = Menu()

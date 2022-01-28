@@ -10,18 +10,22 @@ from database import *
 db = Database(DATABASE)
 
 
+# Функция, которая отображает меню рекордов
 def window_records():
+    # Отрисовка самого раздела и применение шрифта
     screen = pygame.display.set_mode((W, H))
     manager = pygame_gui.UIManager((W, H), 'theme.json')
     title_font = pygame.font.Font(os.path.join(FONTS_PATH, "font.ttf"), 42)
     text_font = pygame.font.Font(os.path.join(FONTS_PATH, "font.ttf"), 30)
     games_info_font = pygame.font.Font(os.path.join(FONTS_PATH, "font.ttf"), 28)
 
+    # Отображение элементов
     level_1 = title_font.render("level 1", True, (255, 255, 0))
     min_1 = text_font.render("min", True, (225, 225, 225))
     max_1 = text_font.render("max", True, (225, 225, 225))
     avg_1 = text_font.render("avg", True, (225, 225, 225))
 
+    # Внесение изменений в БД
     db_scores = db.get_scores(1)
     scores_count = str(len(db_scores))
     games_info = scores_count + " " + ("game" if scores_count[-1] == "1" and scores_count != "11" else "games")
@@ -29,25 +33,30 @@ def window_records():
 
     level_1_scores = [0] if not db_scores else db_scores
 
+    # Отображение
     min_value_1 = text_font.render(str(min(level_1_scores)), True, (255, 255, 255))
     max_value_1 = text_font.render(str(max(level_1_scores)), True, (255, 255, 255))
     avg_value_1 = text_font.render(str(sum(level_1_scores) // len(level_1_scores)), True, (255, 255, 255))
 
+    # Отображение элементов
     level_2 = title_font.render("level 2", True, (255, 255, 0))
     min_2 = text_font.render("min", True, (225, 225, 225))
     max_2 = text_font.render("max", True, (225, 225, 225))
     avg_2 = text_font.render("avg", True, (225, 225, 225))
 
+    # Внесение изменений в БД
     db_scores = db.get_scores(2)
     scores_count = str(len(db_scores))
     games_info = scores_count + " " + ("game" if scores_count[-1] == "1" and scores_count != "11" else "games")
     games_info_text_2 = games_info_font.render(games_info, True, (220, 220, 220))
 
+    # Отображение элементов
     level_2_scores = [0] if not db_scores else db_scores
     min_value_2 = text_font.render(str(min(level_2_scores)), True, (255, 255, 255))
     max_value_2 = text_font.render(str(max(level_2_scores)), True, (255, 255, 255))
     avg_value_2 = text_font.render(str(sum(level_2_scores) // len(level_2_scores)), True, (255, 255, 255))
 
+    # Отображение кнопки
     clock = pygame.time.Clock()
     running = True
     image = pygame.image.load(os.path.join(MENU_SPRITES_PATH, "records.png"))
@@ -55,6 +64,7 @@ def window_records():
                                                  text='Back',
                                                  manager=manager)
 
+    # Процесс отображения в разделе
     while running:
         time_delta = clock.tick(FPS) / 1000.0
 
@@ -94,8 +104,9 @@ def window_records():
         pygame.display.flip()
 
 
+# Функция, которая отображает интсрукцию
 def window_help():
-    """окно с инструкцией"""
+    # Применение переменных
     screen = pygame.display.set_mode((W, H))
     clock = pygame.time.Clock()
     manager = pygame_gui.UIManager((W, H), 'theme.json')
@@ -120,18 +131,20 @@ def window_help():
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
+            # Проверка событий
             manager.process_events(event)
 
+        # Отображение экрана инструкций
         manager.update(time_delta)
         screen.blit(image, (0, 0))
         manager.draw_ui(screen)
         pygame.display.flip()
 
 
+# Класс главного меню и его отображение
 class Menu:
-    """класс главного меню"""
-
     def __init__(self):
+        # Инициализация переменных и кнопок
         super().__init__()
         pygame.init()
         pygame.font.init()
@@ -154,9 +167,8 @@ class Menu:
         self.button_quit = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((810, 410), (150, 60)), text='Quit',
                                                         manager=self.manager)
 
+    # Метод в котором происходит отображение
     def menu(self, game_plot, game_runner):
-        """главное меню"""
-        # print(self.display)
         clock = pygame.time.Clock()
         image = pygame.image.load(os.path.join("data/sprites/background.png"))
 
@@ -187,8 +199,10 @@ class Menu:
                     if event.ui_element == self.button_help:
                         window_help()
 
+                # Провека событий
                 self.manager.process_events(event)
 
+            # Отображение на холсте
             self.manager.update(time_delta)
             self.screen.blit(image, (0, 0))
             self.manager.draw_ui(self.screen)

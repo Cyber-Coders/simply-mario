@@ -3,13 +3,13 @@
 Gadzhimuradov M.
 """
 
+# Импорт библиотек и модулей
 from pygame import Rect
 from config import W, H
 
 
+# Вычисляет сдвиг для отрисовки изображения в окне
 def camera_configure(camera, target_rect):
-    """Вычисляет "сдвиг" для отрисовки изображения в окне."""
-
     l = -target_rect.x + W / 2
     t = -target_rect.y + H / 2
     w, h = camera.width, camera.height
@@ -21,11 +21,10 @@ def camera_configure(camera, target_rect):
 
     return Rect(l, t, w, h)
 
-
+# На основе полученного сдвига вычисляет координаты для отрисовки отдельного блока
 class Camera:
-    """На основе полученного сдвига вычисляет координаты для отрисовки отдельного блока"""
-
     def __init__(self, width, height):
+        # Применяем переданные значения для констант
         self.width, self.height = width, height
         self.state = Rect(0, 0, width, height)
 
