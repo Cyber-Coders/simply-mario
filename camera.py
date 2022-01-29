@@ -21,6 +21,7 @@ def camera_configure(camera, target_rect):
 
     return Rect(l, t, w, h)
 
+
 # На основе полученного сдвига вычисляет координаты для отрисовки отдельного блока
 class Camera:
     def __init__(self, width, height):

@@ -7,9 +7,9 @@ import config
 MOVE_SPEED = 8
 ANIMATION_DELAY = 1
 
-ANIMATION_RIGHT = [('data/sprites/enemy/animation_1.png'),
-                   ('data/sprites/enemy/animation_2.png'),
-                   ('data/sprites/enemy/animation_3.png')]
+ANIMATION_RIGHT = ['data/sprites/enemy/animation_1.png',
+                   'data/sprites/enemy/animation_2.png',
+                   'data/sprites/enemy/animation_3.png']
 
 
 # Класс, который отображает врага

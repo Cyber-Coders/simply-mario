@@ -104,7 +104,7 @@ def window_records():
         pygame.display.flip()
 
 
-# Функция, которая отображает интсрукцию
+# Функция, которая отображает инструкцию
 def window_help():
     # Применение переменных
     screen = pygame.display.set_mode((W, H))
@@ -199,7 +199,7 @@ class Menu:
                     if event.ui_element == self.button_help:
                         window_help()
 
-                # Провека событий
+                # Проверка событий
                 self.manager.process_events(event)
 
             # Отображение на холсте
