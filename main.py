@@ -61,10 +61,11 @@ class Game:
 
 
 class Game2:
-    def __init__(self, map_2, hero, enemy_goomba):
+    def __init__(self, map_2, hero, enemy_goomba, *coins):
         self.map_2 = map_2
         self.hero = hero
         self.enemy_goomba = enemy_goomba
+        self.coins = coins
 
         self.enemy_goomba.rect.x = 300
         self.enemy_goomba.rect.y = 615
@@ -81,8 +82,14 @@ class Game2:
                 block.update(self.hero)
                 screen.blit(block.image, self.camera.apply(block))
 
+        for coin in self.coins:
+            screen.blit(coin.image, self.camera.apply(coin))
+
         screen.blit(self.hero.image, self.camera.apply(self.hero))
         screen.blit(self.enemy_goomba.image, self.camera.apply(self.enemy_goomba))
+
+        for coin in self.coins:
+            coin.check(self.hero.get_position())
 
         self.hero.update()
 
@@ -176,13 +183,16 @@ def main():
 
     map_1 = Map('map_1')
     map_2 = Map('map_2')
-    player = Hero((200, 200))
+    player = Hero((200, 500))
     enemy_goomba = EnemyGoomba((300, 615))
 
-    coins_black_list = [*range(29, 44), *range(78, 92)]
-    coins = [Coin((240 + i * 80, 612)) for i in range(100) if i not in coins_black_list]
+    coins_black_list = [*range(29, 44), *range(78, 92), *range(155, 166), *range(200, 207)]
+    coins = [Coin((240 + i * 80, 612)) for i in range(250) if i not in coins_black_list]
+    coins_black_list_2 = [*range(26, 49), *range(100, 134), *range(149, 169), *range(194, 231)]
+    coins_2 = [Coin((240 + i * 80, 612)) for i in range(300) if i not in coins_black_list_2]
+
     game = Game(map_1, player, enemy_goomba, *coins)
-    game_2 = Game2(map_2, player, enemy_goomba)
+    game_2 = Game2(map_2, player, enemy_goomba, *coins_2)
 
     font = pygame.font.Font('data/font/font.ttf', 30)
 
