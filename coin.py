@@ -22,6 +22,6 @@ class Coin:
     def check(self, position):
         if position[0] == self.rect.x and (position[1] == 606 or position[1] == 607) and self.count == 0:
             self.image.fill((0, 0, 0))
-            config.score += 5
+            config.SCORE += 5
             self.count = 1
             pygame.mixer.music.play(1)

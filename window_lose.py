@@ -36,9 +36,9 @@ def window_lose():
                     sys.exit()
 
                 if event.ui_element == button_restart:
-                    config.restart = True
+                    config.RESTART = True
                     running = False
-                    config.health = 2
+                    config.HEALTH = 2
 
             manager.process_events(event)
 

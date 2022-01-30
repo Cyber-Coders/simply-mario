@@ -1,8 +1,8 @@
-import config
-
 import pygame
 import pyganim
-import sys
+from database import *
+
+db = Database()
 
 JUMP_POWER = 10
 GRAVITY = 0.5
@@ -108,15 +108,15 @@ class Hero:  # Персонаж
         self.rect.x += self.velocity_x
         self.rect.y += self.velocity_y
 
-        if self.rect.x >= 19984 and not config.check_map_2:
-            config.check_map_2 = True
+        if self.rect.x >= 19984 and not config.CHECK_MAP_2:
+            config.CHECK_MAP_2 = True
             self.rect.x = 200
             self.rect.y = 500
-            config.health = 2
-            config.score = 0
+            config.HEALTH = 2
+            config.SCORE = 0
 
-        if self.rect.x >= 21984 and config.check_map_2:
-            sys.exit()
+        if self.rect.x >= 21984 and config.CHECK_MAP_2:
+            db.add_record(2)
 
     def get_position(self):
         return self.rect.x, self.rect.y

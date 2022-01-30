@@ -1,6 +1,9 @@
 import pygame
 import config
-import db
+
+from database import *
+
+db = Database()
 
 
 def transition_menu(screen):
@@ -54,9 +57,11 @@ def transition_menu(screen):
             if click[0] == 1:
                 pygame.mixer.Sound.play(sound)
                 pygame.time.delay(1000)
-                config.check_map_2 = True
-                config.score = 0
-                config.health = 2
+                db.add_record(1)
+
+                config.CHECK_MAP_2 = True
+                config.SCORE = 0
+                config.HEALTH = 2
 
     Next = font.render('Next', True, backlight_Next)
     screen.blit(Next, (x + 170, y))

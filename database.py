@@ -1,18 +1,20 @@
 import sqlite3
 
+import config
+
 
 class Database:
-    def __init__(self, name):
-        self.connection = sqlite3.connect(name)
+    def __init__(self):
+        self.connection = sqlite3.connect(config.DATABASE_PATH)
         self.cursor = self.connection.cursor()
 
     def get_scores(self, level):
-        scores = self.cursor.execute("select score from Records where level=%d" % level).fetchall()
+        scores = self.cursor.execute("select SCORE from Records where level=%d" % level).fetchall()
 
         return [i[0] for i in scores]
 
-    def add_record(self, level, value):
-        self.cursor.execute("INSERT INTO Records (level, score) VALUES (%d, %d)" % (level, value))
+    def add_record(self, level):
+        self.cursor.execute("INSERT INTO Records (level, SCORE) VALUES (%d, %d)" % (level, config.SCORE))
 
         self.connection.commit()
 

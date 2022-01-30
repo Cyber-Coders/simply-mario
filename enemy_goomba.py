@@ -49,7 +49,7 @@ class EnemyGoomba:
     # Метод, который сверяет позиции героя и врага
     def check(self, position):
         if position[0] == self.rect.x and (position[1] == 606 or position[1] == 607):
-            config.health -= 1
+            config.HEALTH -= 1
 
-        if config.health == 0:
+        if config.HEALTH == 0:
             window_lose()

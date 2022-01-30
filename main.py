@@ -57,22 +57,22 @@ class Game:
         self.hero.update()
 
         for _ in range(3):
-            if not config.stop_enemy:
+            if not config.STOP_ENEMY:
                 self.enemy_goomba.check(self.hero.get_position())
                 self.enemy_goomba.update()
 
         # Кнопки для перехода с 1 на 2 уровень или выход в главное меню
-        if self.hero.get_position()[0] >= 19850 and not config.check_map_2:
-            config.stop_enemy = True
+        if self.hero.get_position()[0] >= 19850 and not config.CHECK_MAP_2:
+            config.STOP_ENEMY = True
             if transition_menu(screen):
                 menu = Menu()
                 menu.menu(game_plot, main)
                 quit()
 
-        if config.restart:
-            config.restart = False
-            config.health = 2
-            config.score = 0
+        if config.RESTART:
+            config.RESTART = False
+            config.HEALTH = 2
+            config.SCORE = 0
             main()
 
 
@@ -113,8 +113,8 @@ class Game2:
             self.enemy_goomba.check(self.hero.get_position())
             self.enemy_goomba.update()
 
-        if config.restart:
-            config.restart = False
+        if config.RESTART:
+            config.RESTART = False
             main()
 
 
@@ -218,8 +218,8 @@ def main():
 
     running = True
     while running:
-        text_health = font.render(str(f"Health: {config.health}"), True, (255, 255, 255))
-        text_score = font.render(str(f"Score: {config.score}"), True, (255, 255, 255))
+        text_health = font.render(str(f"Health: {config.HEALTH}"), True, (255, 255, 255))
+        text_score = font.render(str(f"Score: {config.SCORE}"), True, (255, 255, 255))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -227,7 +227,7 @@ def main():
 
         # Отображения всех игровых объектов
         screen.fill((0, 0, 0))
-        if not config.check_map_2:
+        if not config.CHECK_MAP_2:
             game.render(screen)
         else:
             game_2.render(screen)

@@ -4,10 +4,10 @@ import sys
 import pygame
 import pygame_gui
 
-from config import W, H, FPS, DATABASE, MENU_SPRITES_PATH, SOUNDS_PATH, FONTS_PATH
+from config import W, H, FPS, DATABASE_PATH, MENU_SPRITES_PATH, SOUNDS_PATH, FONTS_PATH
 from database import *
 
-db = Database(DATABASE)
+db = Database()
 
 
 # Функция, которая отображает меню рекордов
@@ -149,6 +149,7 @@ class Menu:
         pygame.init()
         pygame.font.init()
         pygame.mixer.init()
+        pygame.mixer.music.set_volume(0.1)
         pygame.mixer.music.load(os.path.join(SOUNDS_PATH, "soundtrack.mp3"))
         pygame.mixer.music.play(-1)
 
