@@ -1,5 +1,6 @@
 import pygame
 import config
+import db
 
 
 def transition_menu(screen):
@@ -54,6 +55,8 @@ def transition_menu(screen):
                 pygame.mixer.Sound.play(sound)
                 pygame.time.delay(1000)
                 config.check_map_2 = True
+                config.score = 0
+                config.health = 2
 
     Next = font.render('Next', True, backlight_Next)
     screen.blit(Next, (x + 170, y))

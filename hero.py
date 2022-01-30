@@ -110,7 +110,7 @@ class Hero:  # Персонаж
 
         if self.rect.x >= 19984 and not config.check_map_2:
             config.check_map_2 = True
-            self.rect.x = 19800
+            self.rect.x = 200
             self.rect.y = 500
             config.health = 2
             config.score = 0

@@ -56,7 +56,7 @@ class Game:
         # Методы изменяющие положение персонажа, а так же проверки совпадения координат игрока с врагом
         self.hero.update()
 
-        for _ in range(20):
+        for _ in range(3):
             if not config.stop_enemy:
                 self.enemy_goomba.check(self.hero.get_position())
                 self.enemy_goomba.update()
@@ -71,6 +71,8 @@ class Game:
 
         if config.restart:
             config.restart = False
+            config.health = 2
+            config.score = 0
             main()
 
 
@@ -201,7 +203,7 @@ def main():
 
     map_1 = Map('map_1')
     map_2 = Map('map_2')
-    player = Hero((19800, 500))
+    player = Hero((200, 500))
     enemy_goomba = EnemyGoomba((300, 615))
 
     coins_black_list = [*range(29, 44), *range(78, 92), *range(155, 166), *range(200, 207)]
