@@ -82,6 +82,7 @@ class Game2:
         self.hero = hero
         self.enemy_goomba = enemy_goomba
         self.coins = coins
+        self.flag = False
 
         self.enemy_goomba.rect.x = 300
         self.enemy_goomba.rect.y = 615
@@ -91,6 +92,10 @@ class Game2:
             self.map_2.height * TILE_SIZE)
 
     def render(self, screen):
+        if not self.flag:
+            self.hero.rect.x = 200
+            self.flag = True
+
         self.camera.update(self.hero)
 
         for row in self.map_2.blocks:
@@ -115,6 +120,10 @@ class Game2:
 
         if config.RESTART:
             config.RESTART = False
+            config.CHECK_MAP_2 = True
+            self.hero.rect = 200, 500
+            config.HEALTH = 2
+            config.SCORE = 0
             main()
 
 
@@ -203,7 +212,7 @@ def main():
 
     map_1 = Map('map_1')
     map_2 = Map('map_2')
-    player = Hero((200, 500))
+    player = Hero((19800, 500))
     enemy_goomba = EnemyGoomba((300, 615))
 
     coins_black_list = [*range(29, 44), *range(78, 92), *range(155, 166), *range(200, 207)]
@@ -218,8 +227,14 @@ def main():
 
     running = True
     while running:
+        if not config.CHECK_MAP_2:
+            level = 1
+        else:
+            level = 2
+
         text_health = font.render(str(f"Health: {config.HEALTH}"), True, (255, 255, 255))
         text_score = font.render(str(f"Score: {config.SCORE}"), True, (255, 255, 255))
+        text_level = font.render(str(f"Level: {level}"), True, (255, 253, 1))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -234,6 +249,7 @@ def main():
 
         screen.blit(text_health, (30, 30))
         screen.blit(text_score, (30, 60))
+        screen.blit(text_level, (1100, 30))
         clock.tick(FPS)
         pygame.display.flip()
 
