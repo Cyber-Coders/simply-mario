@@ -12,6 +12,7 @@ from hero import Hero
 from enemy_goomba import EnemyGoomba
 from map import Map
 from coin import Coin
+from transition import transition_menu
 
 # Задаём название для окна
 pygame.display.set_caption(TITLE)
@@ -58,6 +59,13 @@ class Game:
         for _ in range(3):
             self.enemy_goomba.check(self.hero.get_position())
             self.enemy_goomba.update()
+
+        # Кнопки для перехода с 1 на 2 уровень или выход в главное меню
+        if self.hero.get_position()[0] >= 19850 and not config.check_map_2:
+            if transition_menu(screen):
+                menu = Menu()
+                menu.menu(game_plot, main)
+                quit()
 
 
 class Game2:
