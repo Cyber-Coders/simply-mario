@@ -57,11 +57,13 @@ class Game:
         self.hero.update()
 
         for _ in range(20):
-            self.enemy_goomba.check(self.hero.get_position())
-            self.enemy_goomba.update()
+            if not config.stop_enemy:
+                self.enemy_goomba.check(self.hero.get_position())
+                self.enemy_goomba.update()
 
         # Кнопки для перехода с 1 на 2 уровень или выход в главное меню
         if self.hero.get_position()[0] >= 19850 and not config.check_map_2:
+            config.stop_enemy = True
             if transition_menu(screen):
                 menu = Menu()
                 menu.menu(game_plot, main)
@@ -199,7 +201,7 @@ def main():
 
     map_1 = Map('map_1')
     map_2 = Map('map_2')
-    player = Hero((200, 500))
+    player = Hero((19800, 500))
     enemy_goomba = EnemyGoomba((300, 615))
 
     coins_black_list = [*range(29, 44), *range(78, 92), *range(155, 166), *range(200, 207)]
