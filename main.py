@@ -56,7 +56,7 @@ class Game:
         # Методы изменяющие положение персонажа, а так же проверки совпадения координат игрока с врагом
         self.hero.update()
 
-        for _ in range(3):
+        for _ in range(20):
             self.enemy_goomba.check(self.hero.get_position())
             self.enemy_goomba.update()
 
@@ -66,6 +66,10 @@ class Game:
                 menu = Menu()
                 menu.menu(game_plot, main)
                 quit()
+
+        if config.restart:
+            config.restart = False
+            main()
 
 
 class Game2:
@@ -104,6 +108,10 @@ class Game2:
         for _ in range(3):
             self.enemy_goomba.check(self.hero.get_position())
             self.enemy_goomba.update()
+
+        if config.restart:
+            config.restart = False
+            main()
 
 
 # Метод в котором будет происходить изображение начального сюжета игры

@@ -5,6 +5,7 @@ TILE_SIZE = 20
 score = 0
 health = 2
 check_map_2 = False
+restart = False
 DATABASE = "database.db"
 
 MENU_SPRITES_PATH = r"data\sprites\menu"

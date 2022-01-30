@@ -1,3 +1,5 @@
+from window_lose import window_lose
+
 import pygame
 import pyganim
 
@@ -50,4 +52,4 @@ class EnemyGoomba:
             config.health -= 1
 
         if config.health == 0:
-            pass
+            window_lose()
