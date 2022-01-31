@@ -10,7 +10,7 @@ def window_lose():
     clock = pygame.time.Clock()
     running = True
 
-    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((400, 480), (190, 50)), text='cancel',
+    button_cancel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((400, 480), (190, 50)), text='Exit',
                                                  manager=manager)
 
     button_restart = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((600, 480), (240, 50)), text='Restart',

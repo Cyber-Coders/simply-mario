@@ -69,13 +69,6 @@ class Game:
                 menu.menu(game_plot, main)
                 quit()
 
-        elif self.hero.get_position()[0] >= 22000 and config.CHECK_MAP_2:
-            config.STOP_ENEMY = True
-            if level_end_transition(screen):
-                menu = Menu()
-                menu.menu(game_plot, main)
-                quit()
-
         if config.RESTART:
             config.RESTART = False
             config.HEALTH = 2
@@ -132,6 +125,13 @@ class Game2:
             config.HEALTH = 2
             config.SCORE = 0
             main()
+
+        if self.hero.get_position()[0] >= 22000 and config.CHECK_MAP_2:
+            config.STOP_ENEMY = True
+            if level_end_transition(screen):
+                menu = Menu()
+                menu.menu(game_plot, main)
+                quit()
 
 
 # Метод в котором будет происходить изображение начального сюжета игры
@@ -219,7 +219,7 @@ def main():
 
     map_1 = Map('map_1')
     map_2 = Map('map_2')
-    player = Hero((19800, 500))
+    player = Hero((200, 500))
     enemy_goomba = EnemyGoomba((300, 615))
 
     coins_black_list = [*range(29, 44), *range(78, 92), *range(155, 166), *range(200, 207)]

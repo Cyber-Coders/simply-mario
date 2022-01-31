@@ -73,7 +73,10 @@ class Hero:  # Персонаж
         left = pressed[pygame.K_LEFT]
         right = pressed[pygame.K_RIGHT]
 
-        if left:
+        right_2 = pressed[pygame.K_d]
+        left_2 = pressed[pygame.K_a]
+
+        if left or left_2:
             self.velocity_x = -MOVE_SPEED
             self.image.fill((0, 0, 0))
             if not self.grounded:
@@ -81,7 +84,7 @@ class Hero:  # Персонаж
             else:
                 self.boltAnimLeft.blit(self.image, (0, 0))
 
-        if right:
+        if right or right_2:
             self.velocity_x = MOVE_SPEED
             self.image.fill((0, 0, 0))
             if not self.grounded:
@@ -89,13 +92,13 @@ class Hero:  # Персонаж
             else:
                 self.boltAnimRight.blit(self.image, (0, 0))
 
-        if not left and not right:
+        if not left and not left_2 and not right and not right_2:
             self.velocity_x = 0
             if self.grounded:
                 self.image.fill((0, 0, 0))
                 self.boltAnimStay.blit(self.image, (0, 0))
 
-        if pressed[pygame.K_UP]:
+        if pressed[pygame.K_UP] or pressed[pygame.K_w]:
             if self.grounded:
                 self.velocity_y -= JUMP_POWER
                 self.image.fill((0, 0, 0))
