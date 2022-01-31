@@ -9,7 +9,7 @@ RESTART = False
 STOP_ENEMY = False
 
 DATABASE_PATH = "database.db"
-MENU_SPRITES_PATH = r"data\sprites\menu"
+MENU_SPRITES_PATH = r"data\sprites"
 PLOT_SPRITES_PATH = r"data\sprites\plot"
 SOUNDS_PATH = r"data\sounds"
 FONTS_PATH = r"data\font"
