@@ -58,7 +58,7 @@
                  "package": "minica",
                  "resource": "minica-1102-1.ttf"
              },
-             "regular_path": "data/font/minica-1102-1.ttf"
+             "regular_path": "data/font/font.ttf"
          }
      }
  }

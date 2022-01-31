@@ -1,132 +1,197 @@
-from menu import *
+import os.path
 import sys
 import time
-import config
 import pygame
 import pygame_gui
-import pytmx
+import config
+
+from menu import Menu
+from camera import Camera
+from config import TILE_SIZE, W, H, FPS, TITLE, PLOT_SPRITES_PATH
+from hero import Hero
+from enemy_goomba import EnemyGoomba
+from map import Map
+from coin import Coin
+from transition import transition_menu, level_end_transition
+
+# Задаём название для окна
+pygame.display.set_caption(TITLE)
 
 
-# Объявление констант
-TILE_SIZE = 20
-SCROLL = [0, 0]
-
-
-class Camera:
-    def __init__(self):
-        self.dx = 0
-        self.dy = 0
-
-    def apply(self, obj):
-        obj.rect.x += self.dx
-        obj.rect.y += self.dy
-
-    def update(self, target):
-        self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
-        self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
-
-
-class Map:  # Карта
-    def __init__(self, free_tiles):
-        self.map = pytmx.load_pygame("data/maps/map_1.tmx")
-        self.height = self.map.height
-        self.width = self.map.width
-        self.tile_size = self.map.tilewidth
-        self.free_tiles = free_tiles
-
-    def render(self, screen):
-        for i in range(6):
-            for y in range(self.height):
-                for x in range(self.width):
-                    image = self.map.get_tile_image(x, y, i)
-                    if image is not None:
-                        screen.blit(image, (x * TILE_SIZE, y * TILE_SIZE))
-
-    def get_tile_id(self, position):
-        return self.map.tiledgidmap[self.map.get_tile_gid(*position, 0)]
-
-    def is_free(self, position):
-        return self.get_tile_id(position) in self.free_tiles
-
-
-class Hero:  # Персонаж
-    def __init__(self, position):
-        self.x, self.y = position
-
-    def set_postion(self, position):
-        self.x, self.y = position
-
-    def get_position(self):
-        return self.x, self.y
-
-    def render(self, screen):
-        center = self.x * TILE_SIZE + TILE_SIZE // 2, self.y * TILE_SIZE + TILE_SIZE // 2
-        pygame.draw.circle(screen, (255, 255, 255), center, TILE_SIZE // 2)
-
-
-class Game:  # Игра
-    def __init__(self, map_1, hero):
+# класс игры, который отображает все различные элементы и приводит для сдвига камеры для персонажа
+class Game:
+    def __init__(self, map_1, hero, enemy_goomba, *coins):
+        # Задаём переменным значение
         self.map_1 = map_1
         self.hero = hero
+        self.enemy_goomba = enemy_goomba
+        self.coins = coins
+
+        self.camera = Camera(
+            self.map_1.width * TILE_SIZE,
+            self.map_1.height * TILE_SIZE)
+
+    # Метод для отображения всех объектов в данной игре
+    def render(self, screen):
+        self.camera.update(self.hero)
+
+        for row in self.map_1.blocks:
+            for block in row:
+                block.update(self.hero)
+                screen.blit(block.image, self.camera.apply(block))
+
+        # Отображение монет относительно карты
+        screen.blit(self.enemy_goomba.image, self.camera.apply(self.enemy_goomba))
+
+        for coin in self.coins:
+            screen.blit(coin.image, self.camera.apply(coin))
+
+        # Отображение персонажа
+        screen.blit(self.hero.image, self.camera.apply(self.hero))
+
+        # Проверка совпадений координат монеты с игроком (Mario)
+        for coin in self.coins:
+            coin.check(self.hero.get_position())
+
+        # Методы изменяющие положение персонажа, а так же проверки совпадения координат игрока с врагом
+        self.hero.update()
+
+        for _ in range(3):
+            if not config.STOP_ENEMY:
+                self.enemy_goomba.check(self.hero.get_position())
+                self.enemy_goomba.update()
+
+        # Кнопки для перехода с 1 на 2 уровень или выход в главное меню
+        if self.hero.get_position()[0] >= 19900 and not config.CHECK_MAP_2:
+            config.STOP_ENEMY = True
+            if transition_menu(screen):
+                menu = Menu()
+                menu.menu(game_plot, main)
+                quit()
+
+        if config.RESTART:
+            config.RESTART = False
+            config.HEALTH = 2
+            config.SCORE = 0
+            main()
+
+
+class Game2:
+    def __init__(self, map_2, hero, enemy_goomba, *coins):
+        self.map_2 = map_2
+        self.hero = hero
+        self.enemy_goomba = enemy_goomba
+        self.coins = coins
+        self.flag = False
+
+        self.enemy_goomba.rect.x = 300
+        self.enemy_goomba.rect.y = 615
+
+        self.camera = Camera(
+            self.map_2.width * TILE_SIZE,
+            self.map_2.height * TILE_SIZE)
 
     def render(self, screen):
-        self.map_1.render(screen)
-        self.hero.render(screen)
+        if not self.flag:
+            self.hero.rect.x = 200
+            self.flag = True
 
-    def update_hero(self):
-        next_x, next_y = self.hero.get_position()
-        if pygame.key.get_pressed()[pygame.K_LEFT]:
-            next_x -= 1
-        if pygame.key.get_pressed()[pygame.K_RIGHT]:
-            next_x += 1
-        if self.map_1.is_free((next_x, self.hero.y)):
-            self.hero.set_postion((next_x, self.hero.y))
+        self.camera.update(self.hero)
+
+        for row in self.map_2.blocks:
+            for block in row:
+                block.update(self.hero)
+                screen.blit(block.image, self.camera.apply(block))
+
+        for coin in self.coins:
+            screen.blit(coin.image, self.camera.apply(coin))
+
+        screen.blit(self.hero.image, self.camera.apply(self.hero))
+        screen.blit(self.enemy_goomba.image, self.camera.apply(self.enemy_goomba))
+
+        for coin in self.coins:
+            coin.check(self.hero.get_position())
+
+        self.hero.update()
+
+        for _ in range(3):
+            self.enemy_goomba.check(self.hero.get_position())
+            self.enemy_goomba.update()
+
+        if config.RESTART:
+            config.RESTART = False
+            config.CHECK_MAP_2 = True
+            self.hero.rect = 200, 500
+            config.HEALTH = 2
+            config.SCORE = 0
+            main()
+
+        if self.hero.get_position()[0] >= 22000 and config.CHECK_MAP_2:
+            config.STOP_ENEMY = True
+            if level_end_transition(screen):
+                menu = Menu()
+                menu.menu(game_plot, main)
+                quit()
 
 
-def game_plot():  # Сюжет игры
-    screen = pygame.display.set_mode((1280, 720))
-    manager = pygame_gui.UIManager((1280, 720), 'theme.json')
+# Метод в котором будет происходить изображение начального сюжета игры
+def game_plot():
+    screen = pygame.display.set_mode((W, H))
+    manager = pygame_gui.UIManager((W, H), 'theme.json')
+
     clock = pygame.time.Clock()
     pygame.mixer.music.pause()
-    count = 1
+
+    plot = True
+    image_num = 1
     running = True
-    image = pygame.image.load('data/sprites/starter_template.jpg')
+
     button_continue = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1010, 650), (260, 55)),
                                                    text='Continue', manager=manager)
 
+    # Цикл в котором будет происходить проверка положения кнопки, а так же слайда данного сюжета
     while running:
-        time_delta = clock.tick(30) / 1000.0
+        time_delta = clock.tick(FPS) / 1000.0
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
 
+            # Проверка нажатия на кнопки
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == button_continue:
-                    count += 1
+                    if image_num < 6:
+                        image_num += 1
+
+                    else:
+                        plot = False
 
             manager.process_events(event)
 
-        if count == 2:
+        if not plot:
             running = False
             main()
 
         manager.update(time_delta)
-        if count == 1:
+        if plot:
+            image = pygame.image.load(os.path.join(PLOT_SPRITES_PATH, f"template_{image_num}.jpg"))
             screen.blit(image, (0, 0))
 
         manager.draw_ui(screen)
         pygame.display.flip()
 
 
-def start_animation():  # Анимация запуска игры
-    screen = pygame.display.set_mode((1280, 720))
+# Функция, которая отображает заставку нашей команды
+def start_animation():
+    screen = pygame.display.set_mode((W, H))
     frame = 1
     frame_image = pygame.image.load(f'data/sprites/start/{frame}.png')
     screen.blit(frame_image, (0, 0))
     clock = pygame.time.Clock()
 
     running = True
+
+    # Цикл, который перебирает элементы анимации с некоторой задержкой
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -142,36 +207,66 @@ def start_animation():  # Анимация запуска игры
             time.sleep(2)
             running = False
 
-        clock.tick(config.FPS)
+        clock.tick(FPS)
         pygame.display.flip()
 
 
-def start_menu():  # Запуск меню
-    menu = Menu()
-    menu.menu()
-
-
 def main():
-    screen = pygame.display.set_mode((1280, 720))
+    # Задаём значения переменным и объектам класса
+    screen = pygame.display.set_mode((W, H))
     clock = pygame.time.Clock()
     pygame.mixer.music.stop()
 
-    map_1 = Map([i for i in range(10000)])
-    player = Hero((0, 12))
-    game = Game(map_1, player)
+    map_1 = Map('map_1')
+    map_2 = Map('map_2')
+    player = Hero((200, 500))
+    enemy_goomba = EnemyGoomba((300, 615))
+
+    coins_black_list = [*range(29, 44), *range(78, 92), *range(155, 166), *range(200, 207)]
+    coins = [Coin((240 + i * 80, 612)) for i in range(250) if i not in coins_black_list]
+    coins_black_list_2 = [*range(26, 49), *range(100, 134), *range(149, 169), *range(194, 231)]
+    coins_2 = [Coin((240 + i * 80, 612)) for i in range(300) if i not in coins_black_list_2]
+
+    game = Game(map_1, player, enemy_goomba, *coins)
+    game_2 = Game2(map_2, player, enemy_goomba, *coins_2)
+
+    font = pygame.font.Font('data/font/font.ttf', 30)
 
     running = True
     while running:
+        if not config.CHECK_MAP_2:
+            level = 1
+        else:
+            level = 2
+
+        text_health = font.render(str(f"Health: {config.HEALTH}"), True, (255, 255, 255))
+        text_score = font.render(str(f"Score: {config.SCORE}"), True, (255, 255, 255))
+        text_level = font.render(str(f"Level: {level}"), True, (255, 253, 1))
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
 
-        game.render(screen)
-        game.update_hero()
-        clock.tick(config.FPS)
+        # Отображения всех игровых объектов
+        screen.fill((0, 0, 0))
+        if not config.CHECK_MAP_2:
+            game.render(screen)
+        else:
+            game_2.render(screen)
+
+        screen.blit(text_health, (30, 30))
+        screen.blit(text_score, (30, 60))
+        screen.blit(text_level, (1100, 30))
+        clock.tick(FPS)
         pygame.display.flip()
 
 
-if __name__ == "__main__":
+# Функция, которая загружает меню и передаёт в качестве аргумента сюжет
+def run():
     start_animation()
-    start_menu()
+    menu = Menu()
+    menu.menu(game_plot, main)
+
+
+if __name__ == "__main__":
+    run()
