@@ -77,8 +77,8 @@ def level_end_transition(screen):
 
     backlight = (222, 156, 14)
 
-    x = 510
-    y = 320
+    x = 310
+    y = 650
 
     # Проверка и изменение цвета при наведении у кнопки Back
     if x < mouse[0] < x + 100:
